@@ -1,0 +1,301 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro">
+
+    <xacro:macro name="robot_control_robot" params="
+        name
+        prefix
+        parent
+        *origin
+        " >
+
+
+        <!-- Note : for now i'm using dark grey color for the motors as the mesh does not display the true colors of the motors (.stl is not made for this)
+         I left the .dae file which should display a better visual if you can make it work
+         I'm also spawning a different shaft on the motor which is only a display solution, the size is then not respected -->
+
+    <material name="white">
+        <color rgba="1 1 1 1"/> 
+    </material>
+
+    <material name="orange">
+        <color rgba="1 0.3 0.1 1"/> 
+    </material>
+
+    <material name="blue">
+        <color rgba="0.2 0.2 1 1"/> 
+    </material>
+
+    <material name="black">
+        <color rgba="0 0 0 1"/> 
+    </material>
+
+    <material name="motor">
+        <color rgba="0.160784 0.160784 0.160784 1"/> 
+    </material>
+
+    <material name="GearBox">
+        <color rgba="0.260784 0.260784 0.260784 1"/> 
+    </material>
+
+    <material name="satin">
+        <color rgba="0.627451 0.627451 0.627451 1.0"/>
+    </material>
+
+
+
+
+    <!-- first MOTOR LINK -->
+
+    <link name="${prefix}first_motor">
+        <visual>
+            <geometry>
+                <mesh filename="file://$(find stepper_motor_control)/meshes/PD4-C6018L4204-E-08(1).dae" scale="0.01 0.01 0.01"/>
+            </geometry>
+            <!-- <material name="motor"> -->
+            <!-- </material> -->
+        </visual>
+        
+        <collision>
+            <geometry>
+                <mesh filename="file://$(find stepper_motor_control)/meshes/PD4-C6018L4204-E-08.stl" scale="0.01 0.01 0.01"/>
+            </geometry>
+        </collision>
+    </link>
+
+    <joint name="${prefix}first_motor_joint" type="fixed">
+        <parent link="${parent}"/>
+        <child link="${prefix}first_motor"/>
+        <origin xyz="0 1 0" rpy="-${pi/2} ${pi/2}  0"/>
+    </joint>
+
+
+    <!-- first SHAFT LINK -->
+
+    <link name="${prefix}first_shaft">
+        <visual>
+            <geometry>
+                <!-- change this dimensions to correspond to the real ones -->
+                <cylinder radius="0.05" length="0.3"/>
+            </geometry>
+            <material name="white">
+            </material>
+        </visual>
+        <collision>
+            <geometry>
+                <cylinder radius="0.05" length="0.3"/>
+            </geometry>
+        </collision>
+    </link>
+
+
+    <joint name="${prefix}first_shaft_joint" type="continuous">
+        <parent link="${prefix}first_motor"/>
+        <child link="${prefix}first_shaft"/>
+        <origin xyz="-1.2 0 0" rpy="0 ${pi/2} 0"/>
+        <!-- <limit lower="-100.0" upper="100.0" effort="100.0" velocity="200.0"/> -->
+        <axis xyz="0 0 1" /> 
+    </joint>
+
+
+
+
+
+
+
+
+<!-- second MOTOR LINK -->
+
+    <link name="${prefix}second_motor">
+        <visual>
+            <geometry>
+                <mesh filename="file://$(find stepper_motor_control)/meshes/PD4-C6018L4204-E-08.stl" scale="0.01 0.01 0.01"/>
+            </geometry>
+            <material name="motor">
+            </material>
+        </visual>
+        
+        <collision>
+            <geometry>
+                <mesh filename="file://$(find stepper_motor_control)/meshes/PD4-C6018L4204-E-08.stl" scale="0.01 0.01 0.01"/>
+            </geometry>
+        </collision>
+    </link>
+
+    <joint name="${prefix}second_motor_joint" type="fixed">
+        <parent link="${parent}"/>
+        <child link="${prefix}second_motor"/>
+        <origin xyz="0 -1 0" rpy="-${pi/2} ${pi/2}  0"/>
+    </joint>
+
+
+    <!-- second SHAFT LINK -->
+
+    <link name="${prefix}second_shaft">
+        <visual>
+            <geometry>
+                <!-- change this dimensions to correspond to the real ones -->
+                <cylinder radius="0.05" length="0.3"/> 
+            </geometry>
+            <material name="white">
+            </material>
+        </visual>
+        <collision>
+            <geometry>
+                <cylinder radius="0.05" length="0.3"/>
+            </geometry>
+        </collision>
+    </link>
+
+
+    <joint name="${prefix}second_shaft_joint" type="continuous">
+        <parent link="${prefix}second_motor"/>
+        <child link="${prefix}second_shaft"/>
+        <origin xyz="-1.2 0 0" rpy="0 ${pi/2} 0"/>
+        <!-- <limit lower="-100.0" upper="100.0" effort="100.0" velocity="200.0"/> -->
+        <axis xyz="0 0 1" /> 
+    </joint>
+
+
+
+
+
+
+
+
+    <!-- THIRD MOTOR LINK -->
+
+    <link name="${prefix}third_motor">
+        <visual>
+            <geometry>
+                <mesh filename="file://$(find stepper_motor_control)/meshes/PD4-C6018L4204-E-08.stl" scale="0.01 0.01 0.01"/>
+            </geometry>
+            <material name="motor">
+            </material>
+        </visual>
+        
+        <collision>
+            <geometry>
+                <mesh filename="file://$(find stepper_motor_control)/meshes/PD4-C6018L4204-E-08.stl" scale="0.01 0.01 0.01"/>
+            </geometry>
+        </collision>
+    </link>
+
+    <joint name="${prefix}third_motor_joint" type="fixed">
+        <parent link="${parent}"/>
+        <child link="${prefix}third_motor"/>
+        <origin xyz="1 0 0" rpy="-${pi/2} ${pi/2}  0"/>
+    </joint>
+
+    <!-- THIRD SHAFT LINK -->
+
+    <link name="${prefix}third_shaft">
+        <visual>
+            <geometry>
+                <!-- change this dimensions to correspond to the real ones -->
+                <cylinder radius="0.05" length="0.3"/> 
+            </geometry>
+            <material name="white">
+            </material>
+        </visual>
+        <collision>
+            <geometry>
+                <cylinder radius="0.05" length="0.3"/>
+            </geometry>
+        </collision>
+    </link>
+
+
+    <joint name="${prefix}third_shaft_joint" type="continuous">
+        <parent link="${prefix}third_motor"/>
+        <child link="${prefix}third_shaft"/>
+        <origin xyz="-1.2 0 0" rpy="0 ${pi/2} 0"/>
+        <!-- <limit lower="-100.0" upper="100.0" effort="100.0" velocity="200.0"/> -->
+        <axis xyz="0 0 1" /> 
+    </joint>
+
+
+
+
+
+
+
+
+<!-- Fourth MOTOR LINK -->
+
+<link name="${prefix}fourth_motor">
+    <visual>
+        <geometry>
+            <mesh filename="file://$(find stepper_motor_control)/meshes/PD4-CB59-Body2.stl" scale="0.01 0.01 0.01"/>
+        </geometry>
+        <material name="motor">
+        </material>
+    </visual>
+    
+    <collision>
+        <geometry>
+            <mesh filename="file://$(find stepper_motor_control)/meshes/PD4-CB59-Body2.stl" scale="0.01 0.01 0.01"/>
+        </geometry>
+    </collision>
+</link>
+
+<joint name="${prefix}fourth_motor_joint" type="fixed">
+    <parent link="${parent}"/>
+    <child link="${prefix}fourth_motor"/>
+    <origin xyz="-1 0 0" rpy="0 0 ${pi}"/>
+</joint>
+
+<!-- FOURTH SHAFT LINK -->
+
+<link name="${prefix}fourth_shaft">
+    <visual>
+        <geometry>
+            <!-- change this dimensions to correspond to the real ones -->
+            <!-- <cylinder radius="0.05" length="0.3"/>  -->
+            <mesh filename="file://$(find stepper_motor_control)/meshes/Gear_Box_Shaft.stl" scale="0.01 0.01 0.01"/>
+        </geometry>
+        <material name="satin">
+        </material>
+    </visual>
+    <collision>
+        <geometry>
+            <mesh filename="file://$(find stepper_motor_control)/meshes/Gear_Box_Shaft.stl" scale="0.01 0.01 0.01"/>
+        </geometry>
+    </collision>
+</link>
+
+
+<joint name="${prefix}fourth_shaft_joint" type="continuous">
+    <parent link="${prefix}Gearbox"/>
+    <child link="${prefix}fourth_shaft"/>
+    <origin xyz="0 0 0.476" rpy="0 0 0"/>
+    <!-- <limit lower="-100.0" upper="100.0" effort="100.0" velocity="200.0"/> -->
+    <axis xyz="0 0 -1" /> 
+</joint>
+
+
+<!-- GEAR BOX LINK (FOURTH MOTOR) -->
+
+<link name="${prefix}Gearbox">
+    <visual>
+        <geometry>
+            <mesh filename="file://$(find stepper_motor_control)/meshes/Gear_Box_Body.stl" scale="0.01 0.01 0.01"/>
+        </geometry>
+        <material name="GearBox">
+        </material>
+    </visual>
+    
+    <collision>
+        <geometry>
+            <mesh filename="file://$(find stepper_motor_control)/meshes/Gear_Box_Body.stl" scale="0.01 0.01 0.01"/>
+        </geometry>
+    </collision>
+</link>
+
+<joint name="${prefix}Gearbox_joint" type="fixed">
+    <parent link="${prefix}fourth_motor"/>
+    <child link="${prefix}Gearbox"/>
+    <origin xyz="0 0 1" rpy="0 0 ${pi}"/>
+</joint>
+
+    </xacro:macro>
+</robot>

@@ -1,0 +1,55 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro">
+    <xacro:macro name="robot_control_control" params="
+      name
+      prefix
+      bus_config
+      master_config
+      can_interface_name
+      master_bin">
+
+        <ros2_control name="${name}" type="system"> <!-- the type can be different than system (actuator) ? and one control hardware for each motor ?? -->
+            <hardware>
+                <plugin>canopen_ros2_control/Cia402System</plugin>
+                <param name="bus_config">${bus_config}</param>
+                <param name="master_config">${master_config}</param>
+                <param name="can_interface_name">${can_interface_name}</param>
+                <param name="master_bin">"${master_bin}"</param>
+            </hardware>
+            <!-- <joint name="${prefix}first_shaft_joint">
+                <param name="device_name">first_shaft_joint</param>
+                <state_interface name="position" />
+            </joint> -->
+            <!-- <joint name="${prefix}second_shaft_joint">
+                <param name="device_name">second_shaft_joint</param>
+                <state_interface name="position" />
+            </joint> -->
+            <joint name="${prefix}third_shaft_joint">
+                <param name="node_id">2</param>
+            </joint>
+            <!-- <joint name="${prefix}fourth_shaft_joint">
+                <param name="device_name">fourth_shaft_joint</param>
+                <state_interface name="position" />
+            </joint> -->
+        </ros2_control>
+
+        <!-- The following plugin allows the compatibility with the controllers (see in the launch file), when running, calling the services won't make the motors move, you have to use the plugin's commands instead -->
+
+        <!-- <ros2_control name="${name}" type="system">
+            <hardware>
+                <plugin>canopen_ros2_control/Cia402System</plugin>
+                <param name="bus_config">${bus_config}</param>
+                <param name="master_config">${master_config}</param>
+                <param name="can_interface_name">${can_interface_name}</param>
+                <param name="master_bin">"${master_bin}"</param>
+            </hardware>
+            <joint name="${prefix}first_shaft_joint">
+                <param name="node_id">1</param>
+            </joint>
+            <joint name="${prefix}second_shaft_joint">
+                <param name="node_id">2</param>
+            </joint>
+        </ros2_control> -->
+        
+    </xacro:macro>
+</robot>
