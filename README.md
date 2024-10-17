@@ -15,21 +15,23 @@ Needed
 
 Stepper Motors PD4-C6018L4204-E-08 Nanotec Datasheet :  
 
-https://www.nanotec.com/fileadmin/files/Handbuecher/Plug_Drive/PD4-C/fir-v2213/PD4C_CANopen_Technical-Manual_V3.3.0.pdf?1663072012 
+    https://www.nanotec.com/fileadmin/files/Handbuecher/Plug_Drive/PD4-C/fir-v2213/PD4C_CANopen_Technical-Manual_V3.3.0.pdf?1663072012 
 
  
 
 PCAN-USB FD Adapter :  
 
-https://www.peak-system.com/PCAN-USB-FD.365.0.html?&L=1 
+    https://www.peak-system.com/PCAN-USB-FD.365.0.html?&L=1 
 
  
 
 ROS2_canopen library :  
 
-https://github.com/ros-industrial/ros2_canopen 
+    https://github.com/ros-industrial/ros2_canopen 
 
-Make sure that you use the right branch (humble) otherwise the building won't work : https://github.com/ros-industrial/ros2_canopen/issues/217 
+Make sure that you use the right branch (humble) otherwise the building won't work :     
+
+    https://github.com/ros-industrial/ros2_canopen/issues/217 
 
  
 
@@ -39,23 +41,23 @@ Connect the motors to the computer through a CAN interface :
 
  
 
-Step 1 : Power up the stepper motors with the correspondiing power supplies (24V & 5A) 
+   Step 1 : Power up the stepper motors with the correspondiing power supplies (24V & 5A) 
 
  
 
-Step 2 : Connect the CAN output of the adapter to the stepper motors in parallel (CAN_H, CAN_L and GND) 
+   Step 2 : Connect the CAN output of the adapter to the stepper motors in parallel (CAN_H, CAN_L and GND) 
 
  
 
-Step 3 : Plug the USB to CAN adapter to the computer 
+   Step 3 : Plug the USB to CAN adapter to the computer 
 
  
 
-Step 4 : Run the Peak_usb driver already installed on Ubuntu 22.04/Linux 
+   Step 4 : Run the Peak_usb driver already installed on Ubuntu 22.04/Linux 
 
  
 
-$ sudo modprobe peak_usb 
+    sudo modprobe peak_usb 
 
  
 
@@ -63,27 +65,27 @@ You should see the led lighting up in green on the adapter
 
  
 
-Step 5 : Set up the can interface and set it's parameters :  
+   Step 5 : Set up the can interface and set it's parameters :  
 
  
 
-$ sudo ip link set can0 up type can bitrate 1000000 
+    sudo ip link set can0 up type can bitrate 1000000 
 
  
 
-$ sudo ip link set can0 txqueuelen 1000 
+    sudo ip link set can0 txqueuelen 1000 
 
  
 
-$ sudo ip link set can0 up 
+    sudo ip link set can0 up 
 
  
 
-Step 6 : Verify that the can interface is up and running  
+   Step 6 : Verify that the can interface is up and running  
 
  
 
-$ ifconfig can0 
+    ifconfig can0 
 
  
 
@@ -91,7 +93,7 @@ OR
 
  
 
-$ ip link show can0 
+    ip link show can0 
 
  
 
@@ -99,7 +101,7 @@ And look at the data passing through the can interface :
 
  
 
-$ candump can0 
+    candump can0 
 
  
 
@@ -134,25 +136,25 @@ You can directly send CAN messages to the motors to modify it's parameters but i
 
 What i recommend doing is to get the nanotec USB to CAN adapter ZK-USB-CAN-1 and use it with the Plug & Drive Studio software available on their website :  
 
-https://www.nanotec.com/eu/en/products/2256-software-for-brushless-dc-servo-motor-controller 
+    https://www.nanotec.com/eu/en/products/2256-software-for-brushless-dc-servo-motor-controller 
 
 The software lets you modify the parameters as well as to do some tests. I personnaly used this software to solve a friction issue i had with one of the motors. If you have this issue, please check if the following parameters are similar :  
 
-0x3210:0x01=2048                                // 0x0000 0800 
-
-0x3210:0x02=0                                     // 0x0000 0000 
-
-0x3210:0x03=7000                                // 0x0000 1B58 
-
-0x3210:0x04=4                                     // 0x0000 0004 
-
-0x3210:0x05=8920800                          // 0x0088 1EE0 
-
-0x3210:0x06=509760                            // 0x0007 C740 
-
-0x3210:0x07=8920800                          // 0x0088 1EE0 
-
-0x3210:0x08=509760                            // 0x0007 C740 
+    0x3210:0x01=2048                                // 0x0000 0800 
+    
+    0x3210:0x02=0                                     // 0x0000 0000 
+    
+    0x3210:0x03=7000                                // 0x0000 1B58 
+    
+    0x3210:0x04=4                                     // 0x0000 0004 
+    
+    0x3210:0x05=8920800                          // 0x0088 1EE0 
+    
+    0x3210:0x06=509760                            // 0x0007 C740 
+    
+    0x3210:0x07=8920800                          // 0x0088 1EE0 
+    
+    0x3210:0x08=509760                            // 0x0007 C740 
 
  
 
@@ -178,11 +180,11 @@ Build the package :
 
  
 
-$ colcon build –-symlink-install 
+    colcon build –-symlink-install 
 
  
 
-$ source install/setup.bash 
+    source install/setup.bash 
 
  
 
@@ -190,7 +192,7 @@ Run the launch file (can0 needs to be UP and RUNNING and connected to 4 motors w
 
  
 
-$ ros2 launch nanotec_ros2_control nanotec_robot_control.launch.py 
+    ros2 launch nanotec_ros2_control nanotec_robot_control.launch.py 
 
  
 
@@ -214,11 +216,13 @@ After launching the file, you will see an rviz2 window spawning. You may use the
 
 I recommend using the rqt service caller GUI to make things easier. 
 
+    rqt
+
  
 
 I also implemented the position_tick_motor.cpp file that automatically runs the above services for you (you may have to change the motors joint name directly in the file) 
 
-$ ros2 run nanotec_ros2_control position_tick_client 
+    ros2 run nanotec_ros2_control position_tick_client 
 
  
 
