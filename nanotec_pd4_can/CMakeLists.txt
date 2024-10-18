@@ -24,9 +24,9 @@ cogen_dcf(double-pd4)
 add_executable(position_tick_client src/position_tick_motor.cpp)
 ament_target_dependencies(position_tick_client
 rclcpp std_srvs canopen_interfaces std_msgs)
-add_executable(slider_button_node src/slider.cpp)
-target_link_libraries(slider_button_node Qt5::Widgets)
 
+add_executable(slider_button_node src/slider_button_node.cpp)
+target_link_libraries(slider_button_node Qt5::Widgets)
 ament_target_dependencies(slider_button_node rclcpp std_msgs)
 
 install(TARGETS

@@ -9,10 +9,6 @@
         " >
 
 
-        <!-- Note : for now i'm using dark grey color for the motors as the mesh does not display the true colors of the motors (.stl is not made for this)
-         I left the .dae file which should display a better visual if you can make it work
-         I'm also spawning a different shaft on the motor which is only a display solution, the size is then not respected -->
-
     <material name="white">
         <color rgba="1 1 1 1"/> 
     </material>
@@ -49,10 +45,10 @@
     <link name="${prefix}first_motor">
         <visual>
             <geometry>
-                <mesh filename="file://$(find stepper_motor_control)/meshes/PD4-C6018L4204-E-08(1).dae" scale="0.01 0.01 0.01"/>
+                <mesh filename="file://$(find stepper_motor_control)/meshes/PD4-C6018L4204-E-08.stl" scale="0.01 0.01 0.01"/>
             </geometry>
-            <!-- <material name="motor"> -->
-            <!-- </material> -->
+            <material name="motor">
+            </material>
         </visual>
         
         <collision>

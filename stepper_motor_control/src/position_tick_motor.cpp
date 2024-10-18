@@ -5,51 +5,48 @@
 #include "canopen_interfaces/srv/co_target_double.hpp"
 #include "rclcpp/rclcpp.hpp"
 #include "std_srvs/srv/trigger.hpp" 
+#include "std_msgs/msg/int32.hpp" // To subscribe to slider topic
+
+
+double target_position_ = 0; // Global variable to store slider value
+
+// Callback function for slider subscription
+void slider_callback(const std_msgs::msg::Int32::SharedPtr msg)
+{
+    target_position_ = static_cast<double>(msg->data);  // Convert slider value to double and update target
+    RCLCPP_INFO(rclcpp::get_logger("rclcpp"), "Received slider value: %d", msg->data);
+}
 
 int main(int argc, char * argv[])
 {
   rclcpp::init(argc, argv);
 
-  auto node = rclcpp::Node::make_shared("position_tick_motor_node");
+  std::shared_ptr<rclcpp::Node> node = rclcpp::Node::make_shared("position_tick_motor_node");
 
   RCLCPP_INFO(node->get_logger(), "Position Tick Motor Node Started");
+  rclcpp::Client<std_srvs::srv::Trigger>::SharedPtr init_client =
+    node->create_client<std_srvs::srv::Trigger>("/third_shaft_joint/init");
+  rclcpp::Client<std_srvs::srv::Trigger>::SharedPtr mode_client =
+    node->create_client<std_srvs::srv::Trigger>("/third_shaft_joint/cyclic_position_mode");
+  rclcpp::Client<canopen_interfaces::srv::COTargetDouble>::SharedPtr target_client =
+    node->create_client<canopen_interfaces::srv::COTargetDouble>("/third_shaft_joint/target");
 
-  auto init_client = node->create_client<std_srvs::srv::Trigger>("/second_shaft_joint/init");
-  auto mode_client = node->create_client<std_srvs::srv::Trigger>("/second_shaft_joint/velocity_mode");
-  auto target_client = node->create_client<canopen_interfaces::srv::COTargetDouble>("/second_shaft_joint/target");
+  // Create a subscription to listen to the slider value
+  auto slider_sub = node->create_subscription<std_msgs::msg::Int32>(
+    "slider_value", 10, slider_callback);
 
-  // Service availability checks (split into individual while loops)
-  while (!init_client->wait_for_service(std::chrono::seconds(1)))
+  while (!init_client->wait_for_service(std::chrono::seconds(1)) &&
+         !mode_client->wait_for_service(std::chrono::seconds(1)) &&
+         !target_client->wait_for_service(std::chrono::seconds(1)))
   {
     if (!rclcpp::ok())
     {
-      RCLCPP_ERROR(node->get_logger(), "Interrupted while waiting for the init service. Exiting.");
+      RCLCPP_ERROR(node->get_logger(), "Interrupted while waiting for the service. Exiting.");
       return 0;
     }
-    RCLCPP_INFO(node->get_logger(), "Init service not available, waiting again...");
+    RCLCPP_INFO(node->get_logger(), "service not available, waiting again...");
   }
 
-  while (!mode_client->wait_for_service(std::chrono::seconds(1)))
-  {
-    if (!rclcpp::ok())
-    {
-      RCLCPP_ERROR(node->get_logger(), "Interrupted while waiting for the mode service. Exiting.");
-      return 0;
-    }
-    RCLCPP_INFO(node->get_logger(), "Mode service not available, waiting again...");
-  }
-
-  while (!target_client->wait_for_service(std::chrono::seconds(1)))
-  {
-    if (!rclcpp::ok())
-    {
-      RCLCPP_ERROR(node->get_logger(), "Interrupted while waiting for the target service. Exiting.");
-      return 0;
-    }
-    RCLCPP_INFO(node->get_logger(), "Target service not available, waiting again...");
-  }
-
-  // Init service call
   auto trigger_req = std::make_shared<std_srvs::srv::Trigger::Request>();
   auto result = init_client->async_send_request(trigger_req);
   if (rclcpp::spin_until_future_complete(node, result) == rclcpp::FutureReturnCode::SUCCESS)
@@ -61,7 +58,6 @@ int main(int argc, char * argv[])
     RCLCPP_ERROR(node->get_logger(), "Failed to call init service");
   }
 
-  // Mode service call
   result = mode_client->async_send_request(trigger_req);
   if (rclcpp::spin_until_future_complete(node, result) == rclcpp::FutureReturnCode::SUCCESS)
   {
@@ -74,12 +70,12 @@ int main(int argc, char * argv[])
 
   RCLCPP_INFO(node->get_logger(), "Starting to send target values");
 
-  auto target_req = std::make_shared<canopen_interfaces::srv::COTargetDouble::Request>();
-  double target = 0.0;
+  auto targer_req = std::make_shared<canopen_interfaces::srv::COTargetDouble::Request>();
+  double target = 0;
   while (rclcpp::ok())
   {
-    target_req->target = target;
-    auto res = target_client->async_send_request(target_req);
+    targer_req->target = target;
+    auto res = target_client->async_send_request(targer_req);
     if (rclcpp::spin_until_future_complete(node, res) == rclcpp::FutureReturnCode::SUCCESS)
     {
       RCLCPP_INFO(node->get_logger(), "Set Target: %.2f", target);
@@ -88,10 +84,25 @@ int main(int argc, char * argv[])
     {
       RCLCPP_ERROR(node->get_logger(), "Failed to call target service");
     }
-    rclcpp::sleep_for(std::chrono::seconds(1));
+    rclcpp::sleep_for(std::chrono::milliseconds(50));
 
-    target += 5.0;
-    if (target >= 105.0) target = 0;
+    if (target != target_position_)
+    {
+      // Increment or decrement the current position towards the target
+      if (target < target_position_)
+      {
+          target += 100.0;
+          if (target > target_position_)
+              target = target_position_;
+      }
+      else
+      {
+          target-= 100.0;
+          if (target < target_position_)
+              target= target_position_;
+      }
+    }
+
   }
 
   return 0;

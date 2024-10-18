@@ -14,7 +14,7 @@ This package is used to control the PD4-C6018L4204-E-08 stepper motor from nanot
     ```
 
 ### Run the launch file
-- Fake slave: 
+- real_hw_launch.launch.py: 
     
     ```bash
     ros2 launch nanotec_pd4_can real_hw_launch.launch.py
