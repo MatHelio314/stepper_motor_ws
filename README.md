@@ -192,7 +192,7 @@ Run the launch file (can0 needs to be UP and RUNNING and connected to 4 motors w
 
  
 
-    ros2 launch nanotec_ros2_control nanotec_robot_control.launch.py 
+    ros2 launch stepper_motor_control nanotec_robot_control.launch.py 
 
  
 
@@ -222,7 +222,11 @@ I recommend using the rqt service caller GUI to make things easier.
 
 I also implemented the position_tick_motor.cpp file that automatically runs the above services for you (you may have to change the motors joint name directly in the file) 
 
-    ros2 run nanotec_ros2_control position_tick_client 
+    ros2 run stepper_motor_control position_tick_client 
+
+   and
+
+    ros2 run stepper_motor_control slider_button_node
 
  
 
