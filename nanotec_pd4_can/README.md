@@ -39,9 +39,13 @@ ros2 service call /motor_left/velocity_mode std_srvs/srv/Trigger
 ros2 service call /motor_left/target canopen_interfaces/srv/COTargetDouble "{ target: 100.0 }"
 ```
 
-or
+OR
 
+In separate terminals : 
 ```bash
 ros2 run nanotec_pd4_can slider_button_node
+```
+```bash
 ros2 run nanotec_pd4_can position_tick_client
 ```
+
