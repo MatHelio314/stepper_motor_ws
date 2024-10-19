@@ -18,6 +18,7 @@ find_package(canopen_ros2_controllers REQUIRED)
 find_package(std_msgs REQUIRED)
 find_package(Qt5 COMPONENTS Widgets REQUIRED)
 
+
 # cogen_dcf(robot_control)
 generate_dcf(robot_control)
 

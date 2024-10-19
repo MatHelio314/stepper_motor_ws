@@ -11,14 +11,11 @@ from launch_ros.actions import Node
 
 def generate_launch_description():
     ld = LaunchDescription()
-    slave_eds_path = os.path.join(
-        get_package_share_directory("nanotec_pd4_can"), "config", "double-pd4", "PD4-C6018L4204-E-08.eds"
-    )
 
     master_bin_path = os.path.join(
-        get_package_share_directory("nanotec_pd4_can"),
+        get_package_share_directory("stepper_motor_control"),
         "config",
-        "double-pd4",
+        "robot_control",
         "master.bin",
     )
     if not os.path.exists(master_bin_path):
@@ -34,23 +31,31 @@ def generate_launch_description():
         ),
         launch_arguments={
             "master_config": os.path.join(
-                get_package_share_directory("nanotec_pd4_can"),
+                get_package_share_directory("stepper_motor_control"),
                 "config",
-                "double-pd4",
+                "robot_control",
                 "master.dcf",
             ),
             "master_bin": master_bin_path,
             "bus_config": os.path.join(
-                get_package_share_directory("nanotec_pd4_can"),
+                get_package_share_directory("stepper_motor_control"),
                 "config",
-                "double-pd4",
+                "robot_control",
                 "bus.yml",
             ),
             "can_interface_name": "can0",
         }.items(),
     )
 
-    ld.add_action(device_container)
+    # SLIDER NODE #######
 
+    qt_slider_node = Node(
+        package='stepper_motor_control',  
+        executable='slider_button_node',  
+        output='screen'
+    )
+
+    ld.add_action(device_container)
+    ld.add_action(qt_slider_node)
 
     return ld

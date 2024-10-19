@@ -6,7 +6,9 @@
 #include <QSlider>
 #include <QVBoxLayout>
 #include <QLabel>
-#include <QHBoxLayout>  // For horizontal alignment
+#include <QHBoxLayout>
+#include <QProcess>  // For launching external processes
+
 
 class SliderNode : public rclcpp::Node {
 public:
@@ -48,17 +50,24 @@ public:
         sliderLayout->addWidget(slider);
         sliderLayout->addWidget(valueLabel);
 
-        // Create and style the button
-        QPushButton *button = new QPushButton("Publish Value");
-        button->setStyleSheet("background-color: #e74c3c; color: white; font-weight: bold; font-size: 14px;"
-                              "padding: 10px; border-radius: 5px;");
-        button->setFixedWidth(200);  // Set button width
+        // Create and style the "Publish Value" button
+        QPushButton *publishButton = new QPushButton("Publish Value");
+        publishButton->setStyleSheet("background-color: #e74c3c; color: white; font-weight: bold; font-size: 14px;"
+                                     "padding: 10px; border-radius: 5px;");
+        publishButton->setFixedWidth(200);  // Set button width
 
-        // Align the button to the center
+        // Create and style the "Launch Position Tick Node" button
+        QPushButton *launchButton = new QPushButton("Launch Position Tick Node");
+        launchButton->setStyleSheet("background-color: #2ecc71; color: white; font-weight: bold; font-size: 14px;"
+                                    "padding: 10px; border-radius: 5px;");
+        launchButton->setFixedWidth(300);  // Set button width
+
+        // Align the buttons to the center
         QHBoxLayout *buttonLayout = new QHBoxLayout;
-        buttonLayout->addWidget(button, 0, Qt::AlignCenter);
+        buttonLayout->addWidget(publishButton, 0, Qt::AlignCenter);
+        buttonLayout->addWidget(launchButton, 0, Qt::AlignCenter);
 
-        // Add title, slider layout, and button to main layout
+        // Add title, slider layout, and buttons to main layout
         mainLayout->addWidget(titleLabel);
         mainLayout->addLayout(sliderLayout);
         mainLayout->addLayout(buttonLayout);
@@ -68,16 +77,29 @@ public:
             valueLabel->setText(QString("Current value: %1").arg(value));
         });
 
-        // Connect the button's clicked signal to the callback
-        QObject::connect(button, &QPushButton::clicked, [this, slider]() {
+        // Connect the "Publish Value" button's clicked signal to the callback
+        QObject::connect(publishButton, &QPushButton::clicked, [this, slider]() {
             int value = slider->value();
             publishValue(value);
         });
 
+        // Connect the "Launch Position Tick Node" button's clicked signal to the callback
+        QObject::connect(launchButton, &QPushButton::clicked, [this]() {
+            launchPositionTickNode();
+        });
+
         // Set the layout and show the window
         window->setLayout(mainLayout);
-        window->setFixedSize(400, 200);  // Set a fixed size for the window
+        window->setFixedSize(500, 250);  // Set a fixed size for the window
         window->show();
+
+        // Timer to periodically check if ROS2 is still running
+        check_ros_shutdown_timer_ = this->create_wall_timer(
+            std::chrono::milliseconds(100), [this]() {
+                if (!rclcpp::ok()) {
+                    app_->quit();  // Quit Qt when ROS2 shuts down
+                }
+            });
     }
 
     // Run the Qt application
@@ -93,8 +115,20 @@ private:
         publisher_->publish(message);
     }
 
+    void launchPositionTickNode() {
+        // Launch the "position_tick_node" using QProcess
+        QProcess *process = new QProcess(nullptr);  // Use nullptr if no parent is needed
+        process->start("ros2", QStringList() << "run" << "stepper_motor_control" << "position_tick_client");
+        if (!process->waitForStarted()) {
+            RCLCPP_ERROR(this->get_logger(), "Failed to launch position_tick_node");
+        } else {
+            RCLCPP_INFO(this->get_logger(), "Launched position_tick_node");
+        }
+    }
+
     rclcpp::Publisher<std_msgs::msg::Int32>::SharedPtr publisher_;
     std::shared_ptr<QApplication> app_;
+    rclcpp::TimerBase::SharedPtr check_ros_shutdown_timer_;  // Timer to check ROS shutdown
     int argc_ = 0;
     char **argv_ = nullptr;
 };

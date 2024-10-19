@@ -75,7 +75,27 @@ def generate_launch_description():
     )
 
 
+# SLIDER NODE #######
+
+    qt_slider_node = Node(
+        package='stepper_motor_control',  
+        executable='slider_button_node',  
+        output='screen'
+    )
+    
+
+# RVIZ2
+
+    rviz2 = Node(
+        package='rviz2',
+        executable='rviz2',
+        output='screen'
+    )
+
+
     ld.add_action(delayed_controller_manager)
+    ld.add_action(qt_slider_node)
+    ld.add_action(rviz2)
     ld.add_action(delayed_joint_state_broadcaster_spawner)
     ld.add_action(robot_state_publisher_node)
     return ld
