@@ -43,8 +43,11 @@ Nanotec Stepper motor PD4-C6018L4204-E-08 ROS2 control integration on ROS2
  
 
    Step 1 : Power up the stepper motors with the correspondiing power supplies (24V & 5A) 
+   
    Step 2 : Connect the CAN output of the adapter to the stepper motors in parallel (CAN_H, CAN_L and GND) 
+   
    Step 3 : Plug the USB to CAN adapter to the computer 
+   
    Step 4 : Run the Peak_usb driver already installed on Ubuntu 22.04/Linux 
    
     sudo modprobe peak_usb 
