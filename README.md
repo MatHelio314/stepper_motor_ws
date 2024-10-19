@@ -52,6 +52,7 @@ Nanotec Stepper motor PD4-C6018L4204-E-08 ROS2 control integration on ROS2
    
     sudo modprobe peak_usb 
 You should see the led lighting up in green on the adapter 
+
    Step 5 : Set up the can interface and set it's parameters :  
 
     sudo ip link set can0 up type can bitrate 1000000 
@@ -138,6 +139,8 @@ Run the launch files (can0 needs to be UP and RUNNING and connected to 4 motors 
  
 
 After launching the file, you will see an rviz2 window spawning as well as a slider gui and buttons (make sure that the 'position_tick_motor.cpp' file calls the right motor's joint name).
+
+
 
 
 
