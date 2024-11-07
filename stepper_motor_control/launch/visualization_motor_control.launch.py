@@ -95,7 +95,7 @@ def generate_launch_description():
 
     ld.add_action(delayed_controller_manager)
     ld.add_action(qt_slider_node)
-    ld.add_action(rviz2)
+    # ld.add_action(rviz2)
     ld.add_action(delayed_joint_state_broadcaster_spawner)
     ld.add_action(robot_state_publisher_node)
     return ld
