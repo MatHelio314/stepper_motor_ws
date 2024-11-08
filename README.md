@@ -18,8 +18,13 @@ Nanotec Stepper motor PD4-C6018L4204-E-08 ROS2 control integration on ROS2
 
    Make sure that you use the right branch (humble) otherwise the building won't work :     
 
-      https://github.com/ros-industrial/ros2_canopen/issues/217 
- 
+      https://github.com/ros-industrial/ros2_canopen/issues/217
+
+  Run these commands to change branch : 
+
+      cd ros2_canopen
+
+      git checkout Humble
 
 - Stepper Motors PD4-C6018L4204-E-08 Nanotec Datasheet :  
 
@@ -66,7 +71,9 @@ You should see the led lighting up in green on the adapter
 OR 
 
     ip link show can0 
-And look at the data passing through the can interface :  
+And look at the data passing through the can interface (install can_utils first) :  
+
+    sudo apt install can_utils
 
     candump can0 
 
@@ -107,7 +114,7 @@ Also check if the firmware is up to date (the software can update it for you), i
 
 # Download the GitHub Package and build/launch it 
 
- 
+Before downloading the package, you should install and build the ros2_canopen library
 
 Run the following commands in the /ros2_canopen folder of your new workspace to download the GitHub package :  
 
@@ -124,11 +131,11 @@ Run the launch files (can0 needs to be UP and RUNNING and connected to 4 motors 
 
  Normal mode :
 
-    ros2 launch stepper_motor_control normal_motor_control.launch.py
+    ros2 launch stepper_motor_control main.launch.py sim:=false
 
  Visualization (rviz2) : 
 
-    ros2 launch stepper_motor_control visualization_motor_control.launch.py
+    ros2 launch stepper_motor_control main.launch.py sim:=true
 
  
 
@@ -138,7 +145,7 @@ Run the launch files (can0 needs to be UP and RUNNING and connected to 4 motors 
 
  
 
-After launching the file, you will see an rviz2 window spawning as well as a slider gui and buttons (make sure that the 'position_tick_motor.cpp' file calls the right motor's joint name).
+After launching the file, you will see a slider gui and buttons to control the motors.
 
 
 
