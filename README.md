@@ -124,7 +124,8 @@ The PD4-C is equipped with a hex coding switch. This can be used to set the sour
 
 # Change the parameters of the motors 
 
-You can directly set parameters on the bus.yml file (See README_BUS_FILE.md for more details)
+You can directly set parameters on the bus_template.yml file (See README_BUS_FILE.md for more details)
+
 
 
 What i recommend doing if clarifications are needed is to get the nanotec USB to CAN adapter ZK-USB-CAN-1 and use it with the Plug & Drive Studio software available on their website (windows only):  
@@ -133,6 +134,7 @@ What i recommend doing if clarifications are needed is to get the nanotec USB to
 
 The software lets you modify the parameters as well as to do some tests, i personnaly used this software to solve many issues with the motors.  
 Also check if the firmware is up to date (the software can update it for you), it is also possible to factory reset the motors to avoid any problems. 
+
 
  - - - - - - - - - - - - - - - - - -
 
