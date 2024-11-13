@@ -16,7 +16,7 @@ We define the node_id of the motor, here like expected it is '1', so the device 
 
  
 
-The dcf parameter contains the .EDS file (Eletronical DataSheet) of the motor, it is really important that it correspond exactly to the real motor, this is how the device container will know what instruction correspond to what behavior. Sometimes these .eds files contain forms that ros2_canopen does not like such as hexadecimal data so you will need to replace them manually if you get building errors. 
+The dcf parameter contains the .EDS file (Electronic DataSheet) of the motor, it is really important that it correspond exactly to the real motor, this is how the device container will know what instruction correspond to what behavior. Sometimes these .eds files contain forms that ros2_canopen does not like such as hexadecimal data so you will need to replace them manually if you get building errors. 
 
     dcf: "PD4-C6018L4204-E-08.eds" 
 
