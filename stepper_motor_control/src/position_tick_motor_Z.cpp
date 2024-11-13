@@ -6,14 +6,21 @@
 #include "std_srvs/srv/trigger.hpp"
 #include "std_msgs/msg/int32.hpp"  // To subscribe to slider topic
 #include "sensor_msgs/msg/joint_state.hpp"  // To subscribe to joint_states
+#include "canopen_interfaces/srv/co_write.hpp"
 
 double target_position_ = 0;  // Store slider value
 double current_position_ = 0; // Current positions of motor
+double stop_bool = 0;
 
 // Callback function for slider subscription
 void slider_callback(const std_msgs::msg::Int32::SharedPtr msg) {
     target_position_ = static_cast<double>(msg->data);  // Update target based on slider value
     RCLCPP_INFO(rclcpp::get_logger("rclcpp"), "Received slider value: %d", msg->data);
+}
+
+void stop_callback(const std_msgs::msg::Int32::SharedPtr msg) {
+    stop_bool = static_cast<double>(msg->data);  // Update target based on slider value
+    RCLCPP_INFO(rclcpp::get_logger("rclcpp"), "Received stop value: %d", msg->data);
 }
 
 // Callback function for joint state subscription of Motor
@@ -37,6 +44,7 @@ int main(int argc, char *argv[]) {
 
     // Subscribe to the slider value topic and joint states
     auto slider_sub = node->create_subscription<std_msgs::msg::Int32>("slider_value_z", 10, slider_callback);
+    auto stop_sub = node->create_subscription<std_msgs::msg::Int32>("stop_motor_Z", 10, stop_callback);
     auto joint_state_sub_ = node->create_subscription<sensor_msgs::msg::JointState>(
         "/fourth_shaft_joint/joint_states", 10, joint_state_callback_1);
 
@@ -85,8 +93,9 @@ int main(int argc, char *argv[]) {
         }
     };
 
+    target_position_= current_position_;
     // Main loop: synchronize both motors' movements
-    while (rclcpp::ok()) {
+    while (rclcpp::ok() && stop_bool == 0) {
 
         send_target(target_position_);  // Send the same target to both motors
 
@@ -94,6 +103,9 @@ int main(int argc, char *argv[]) {
 
 
     }
+    send_target(current_position_);
+    call_service(halt_client_, "Motor Halt");
+    rclcpp::shutdown();
 
 
 

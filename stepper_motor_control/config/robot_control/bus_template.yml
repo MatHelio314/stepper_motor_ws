@@ -15,7 +15,7 @@ first_shaft_joint:
   driver: "ros2_canopen::Cia402Driver"
   package: "canopen_402_driver"
   polling: true
-  period: 1
+  period: 10
   diagnostics:
     enable: true
     period: 1000
@@ -26,7 +26,7 @@ first_shaft_joint:
   scale_pos_from_dev : 1.0
   scale_vel_from_dev : 1.0
   
-  heartbeat_producer: 200
+  heartbeat_producer: 2000
   
   sdo: # SDO executed during config
     - {index: 0x3240, sub_index: 2, value: 1} # Function inverted
@@ -112,7 +112,7 @@ second_shaft_joint:
   driver: "ros2_canopen::Cia402Driver"
   package: "canopen_402_driver"
   polling: true
-  period: 1
+  period: 10
   diagnostics:
     enable: true
     period: 1000
@@ -123,7 +123,7 @@ second_shaft_joint:
   scale_pos_from_dev : 1.0
   scale_vel_from_dev : 1.0
   
-  heartbeat_producer: 200
+  heartbeat_producer: 2000
   
   sdo: # SDO executed during config
     - {index: 0x3240, sub_index: 2, value: 1} # Function inverted
@@ -223,7 +223,7 @@ third_shaft_joint:
   heartbeat_producer: 2000
   
   sdo: # SDO executed during config
-    - {index: 0x3240, sub_index: 2, value: 1} # Function inverted
+    # - {index: 0x3240, sub_index: 2, value: 1} # Function inverted
     - {index: 0x6081, sub_index: 0, value: 50} # Set velocity 
     - {index: 0x6083, sub_index: 0, value: 1000} # Set acceleration
     - {index: 0x6084, sub_index: 0, value: 1000} # Set deceleration
@@ -234,11 +234,11 @@ third_shaft_joint:
     - {index: 0x60C2, sub_index: 2, value: -3} # Set base 10-3s
     - {index: 0x60C4, sub_index: 6, value: 1} # Interpolated position mode needed param 
     - {index: 0x60C6, sub_index: 0, value: 1000} # Max Acceleration
-    - {index: 0x607D, sub_index: 1, value: 0} # Min Position
-    - {index: 0x607D, sub_index: 2, value: 336240} # Max Position
-    - {index: 0x6098, sub_index: 0, value: 17} # Homing method
-    - {index: 0x3240, sub_index: 1, value: 1} # Special function enable
-    - {index: 0x3701, sub_index: 0, value: -1} # Limit Switch Error Option Code
+    - {index: 0x607D, sub_index: 1, value: -1000000} # Min Position
+    - {index: 0x607D, sub_index: 2, value: 100000} # Max Position  336240
+    # - {index: 0x6098, sub_index: 0, value: 17} # Homing method
+    # - {index: 0x3240, sub_index: 1, value: 1} # Special function enable
+    # - {index: 0x3701, sub_index: 0, value: -1} # Limit Switch Error Option Code
 
   tpdo: 
     1:

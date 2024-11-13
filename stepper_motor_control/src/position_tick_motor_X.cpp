@@ -125,12 +125,18 @@ int main(int argc, char *argv[]) {
         }
     };
 
+    target_position_ = current_position_1;
+
     // Main loop: synchronize both motors' movements
     while (rclcpp::ok() && stop_bool == 0) {
         send_targets(target_position_, current_position_1, current_position_2);
     }
 
     // Halt motors and shut down
+    target_req_1->target = current_position_1;
+    target_req_2->target = current_position_1;
+    auto res1 = target_client_1->async_send_request(target_req_1);
+    auto res2 = target_client_2->async_send_request(target_req_2);
     call_service_sync(halt_client_1, halt_client_2, "Halt");
     rclcpp::shutdown();
 
