@@ -1,6 +1,9 @@
  
 
-Nanotec Stepper motor PD4-C6018L4204-E-08 ROS2 control integration on ROS2  
+## Nanotec Stepper motor PD4-C6018L4204-E-08 and PD4-C5918l4204-E-08 position control integration on ROS2 using ros2_canopen library
+
+[stepper_motor_control_schematic.pdf](https://github.com/user-attachments/files/17733693/stepper_motor_control_schematic.pdf)
+
 
 - - - - - - - - - - - - - - - - - -
 
