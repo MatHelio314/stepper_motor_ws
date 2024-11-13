@@ -65,6 +65,8 @@ It's function is just to send a set of instructions to the related motors and th
 It first sends a specific value to a specific object to start a reset of the motor. Then it sets the limit switch behavior to do nothing upon activation expect noting the position value and then it initializes the motors. 
 
 To explain why it sends this particular sets of instructions, I'll start with explaining how the homing mode works for these kind of motors. The homing mode only starts once when the init service is called everytime the motor is reset (or unpowered and powered back on). We can choose the homing method as well as some other prameters such as the speed of homing or acceleration. Here i chose the homing method number 17 :  
-Method 17 references to the negative limit switch: Negative limit switch
+
+![image](https://github.com/user-attachments/assets/72e3ea07-9165-4e48-9e8d-372799fb0b06)
+
 
 Which is related to the negative limit switch. As you can see, when the homing starts, the motor goes backward until it hits the limit switch and then goes forward until the goes off again. When that happens, the motor knows that it is now in position 0. One thing we can choose is the behavior upon activating the limit switches, such as immediate stopping or do nothing and note the position. The problem with that is if this is set to immediate stopping, then the homing mode cannot be achieved to the end, that is why we send an instruction to the motor to only note the position and do nothing else upon activation of the limit switch. After all these instructions are sent, the node terminates itself. 
