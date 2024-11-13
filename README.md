@@ -39,7 +39,30 @@ Nanotec Stepper motor PD4-C6018L4204-E-08 ROS2 control integration on ROS2
  - - - - - - - - - - - - - - - - - -
 
 
+# Download the GitHub Package and build/launch it 
 
+Before downloading the package, you should install and build the ros2_canopen library in your workspace
+
+Run the following commands in the /ros2_canopen folder of your new workspace to download the GitHub package :  
+
+    git clone https://<copied_link_from_browser>
+
+Build the package :  
+
+    colcon build –-symlink-install 
+    source install/setup.bash 
+
+
+Run the launch files (can0 needs to be UP and RUNNING and connected to 4 motors with different node_ids (1,2,3,4):  
+
+
+ Normal mode :
+
+    ros2 launch stepper_motor_control main.launch.py sim:=false
+
+ Visualization (rviz2) : 
+
+    ros2 launch stepper_motor_control main.launch.py sim:=true
  
 
  
@@ -112,30 +135,7 @@ Also check if the firmware is up to date (the software can update it for you), i
 
  
 
-# Download the GitHub Package and build/launch it 
 
-Before downloading the package, you should install and build the ros2_canopen library
-
-Run the following commands in the /ros2_canopen folder of your new workspace to download the GitHub package :  
-
-    git clone https://<copied_link_from_browser>
-
-Build the package :  
-
-    colcon build –-symlink-install 
-    source install/setup.bash 
-
-
-Run the launch files (can0 needs to be UP and RUNNING and connected to 4 motors with different node_ids (1,2,3,4):  
-
-
- Normal mode :
-
-    ros2 launch stepper_motor_control main.launch.py sim:=false
-
- Visualization (rviz2) : 
-
-    ros2 launch stepper_motor_control main.launch.py sim:=true
 
  
 
