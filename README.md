@@ -2,7 +2,8 @@
 
 ## Nanotec Stepper motor PD4-C6018L4204-E-08 and PD4-C5918l4204-E-08 position control integration on ROS2 using ros2_canopen library
 
-[stepper_motor_control_schematic.pdf](https://github.com/user-attachments/files/17733693/stepper_motor_control_schematic.pdf)
+![image](https://github.com/user-attachments/assets/002a7ba7-7b30-46b9-a33c-a5e4819d9919)
+
 
 
 - - - - - - - - - - - - - - - - - -
@@ -44,7 +45,7 @@
 
 # Download the GitHub Package and build/launch it 
 
-Before downloading the package, you should install and build the ros2_canopen library in your workspace
+### Before downloading the package, you should install and build the ros2_canopen library in your workspace
 
 Run the following commands in the /ros2_canopen folder of your new workspace to download the GitHub package :  
 
@@ -71,9 +72,11 @@ Run the launch files (can0 needs to be UP and RUNNING and connected to at least 
  
 # Connect the motors to the computer through a CAN interface :  
 
- 
+ ### I'm using a Peak USB to CAN adapter here but any other adapter with a recognizable driver on your computer would do (see daatsheet above)
 
-   Step 1 : Power up the stepper motors with the correspondiing power supplies (24V & 5A) 
+   Step 1 : Power up the stepper motors with the corresponding power supplies (24V & 5A) 
+   
+the Led underneath of the motor should now blink consistently
    
    Step 2 : Connect the CAN output of the adapter to the stepper motors in parallel (CAN_H, CAN_L and GND) 
    
@@ -98,6 +101,7 @@ You should see the led lighting up in green on the adapter
 OR 
 
     ip link show can0 
+    
 And look at the data passing through the can interface (install can_utils first) :  
 
     sudo apt install can_utils
@@ -115,6 +119,8 @@ You should not see anything in the candump for now and that is normal (my advice
 Look for the Hex coding switch for node-ID and baud rate underneath 
 The PD4-C is equipped with a hex coding switch. This can be used to set the source for the node-ID and the baud rate.
 
+![image](https://github.com/user-attachments/assets/ec655696-0511-425e-b5d1-e50e5ee60e5f)
+
  
 
 # Change the parameters of the motors 
@@ -126,16 +132,8 @@ What i recommend doing if clarifications are needed is to get the nanotec USB to
 
     https://www.nanotec.com/eu/en/products/2256-software-for-brushless-dc-servo-motor-controller 
 
-The software lets you modify the parameters as well as to do some tests, iIpersonnaly used this software to solve many issues with the motors.  
+The software lets you modify the parameters as well as to do some tests, i personnaly used this software to solve many issues with the motors.  
 Also check if the firmware is up to date (the software can update it for you), it is also possible to factory reset the motors to avoid any problems. 
-
- 
-
- 
-
-
-
- 
 
  
 
@@ -145,29 +143,23 @@ Also check if the firmware is up to date (the software can update it for you), i
 
 After launching the file, you will see a slider gui and buttons to control the motors.
 
+![image](https://github.com/user-attachments/assets/72020cb3-621f-43a7-a27c-7df3aa246ce2)
 
 
+The gui allows you to reset the motors, initialize them, launch position control nodes and closes them as well as stopping the motors in case of an emergency
 
 
-You may also use the following services in order to control the motors : 
+The principle behing the position control relies on these three services that you can manually call yourself either by running a bash command or by using the rqt service caller client
 
 
-"Motor's joint name"/init 
-
-"Motor's joint name"/(cyclic position, velocity, torque, …) mode 
-
-"Motor's joint name"/target ( {double} ) 
-
-
- 
-I recommend using the rqt service caller GUI to make things easier to visualize. 
-
-    rqt
+    "Motor's joint name"/init 
+    
+    "Motor's joint name"/(cyclic position, velocity, torque, …) mode 
+    
+    "Motor's joint name"/target ( {double} ) 
 
  
 
- 
 
- 
 
-Concerning the meshes, you have to download a .stl file and convert it into a .stl binary to make it work. 
+Concerning the meshes for the visualization launch, if you want to modify them,you have to download a .stl file and convert it into a .stl binary to make it work. 
