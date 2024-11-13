@@ -68,6 +68,7 @@ Run the launch files (can0 needs to be UP and RUNNING and connected to at least 
 
     ros2 launch stepper_motor_control main.launch.py sim:=true
  
+- - - - - - - - - - - - - - - - - -
 
  
 # Connect the motors to the computer through a CAN interface :  
@@ -110,18 +111,16 @@ And look at the data passing through the can interface (install can_utils first)
 
 You should not see anything in the candump for now and that is normal (my advice is to keep this command running for the futur to visualize the data being transmitted) 
 
- 
+ - - - - - - - - - - - - - - - - - -
 
 # Change the node_id of each stepper motor  
-
- 
 
 Look for the Hex coding switch for node-ID and baud rate underneath 
 The PD4-C is equipped with a hex coding switch. This can be used to set the source for the node-ID and the baud rate.
 
 ![image](https://github.com/user-attachments/assets/ec655696-0511-425e-b5d1-e50e5ee60e5f)
 
- 
+ - - - - - - - - - - - - - - - - - -
 
 # Change the parameters of the motors 
 
@@ -135,7 +134,7 @@ What i recommend doing if clarifications are needed is to get the nanotec USB to
 The software lets you modify the parameters as well as to do some tests, i personnaly used this software to solve many issues with the motors.  
 Also check if the firmware is up to date (the software can update it for you), it is also possible to factory reset the motors to avoid any problems. 
 
- 
+ - - - - - - - - - - - - - - - - - -
 
 # Control the motors  
 
