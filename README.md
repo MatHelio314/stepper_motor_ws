@@ -45,7 +45,7 @@ Before downloading the package, you should install and build the ros2_canopen li
 
 Run the following commands in the /ros2_canopen folder of your new workspace to download the GitHub package :  
 
-    git clone https://<copied_link_from_browser>
+    git clone https://github.com/MatHelio314/stepper_motor_ws.git
 
 Build the package :  
 
@@ -53,7 +53,7 @@ Build the package :
     source install/setup.bash 
 
 
-Run the launch files (can0 needs to be UP and RUNNING and connected to 4 motors with different node_ids (1,2,3,4):  
+Run the launch files (can0 needs to be UP and RUNNING and connected to at least one motor (can_id 1,2,3 or/and 4)):  
 
 
  Normal mode :
@@ -76,9 +76,10 @@ Run the launch files (can0 needs to be UP and RUNNING and connected to 4 motors 
    
    Step 3 : Plug the USB to CAN adapter to the computer 
    
-   Step 4 : Run the Peak_usb driver already installed on Ubuntu 22.04/Linux 
+   Step 4 : Run the Peak_usb driver already installed on Ubuntu 22.04/Linux :
    
     sudo modprobe peak_usb 
+    
 You should see the led lighting up in green on the adapter 
 
    Step 5 : Set up the can interface and set it's parameters :  
@@ -100,13 +101,7 @@ And look at the data passing through the can interface (install can_utils first)
 
     candump can0 
 
-You should not see anything for now and that is normal (my advice is to keep this command running for the futur to visualize the data being transmitted) 
-
- 
-
- 
-
- 
+You should not see anything in the candump for now and that is normal (my advice is to keep this command running for the futur to visualize the data being transmitted) 
 
  
 
@@ -114,14 +109,14 @@ You should not see anything for now and that is normal (my advice is to keep thi
 
  
 
-Look for this Hex coding switch for node-ID and baud rate underneath 
-Rotary switch The PD4-C is equipped with a hex coding switch — similar to that shown in the following figure. This can be used to set the source for the node-ID and the baud rate.
+Look for the Hex coding switch for node-ID and baud rate underneath 
+The PD4-C is equipped with a hex coding switch. This can be used to set the source for the node-ID and the baud rate.
 
  
 
 # Change the parameters of the motors 
 
-You can directly set parameters on the bus.yml file
+You can directly set parameters on the bus.yml file (See README_BUS_FILE.md for more details)
 
 
 What i recommend doing if clarifications are needed is to get the nanotec USB to CAN adapter ZK-USB-CAN-1 and use it with the Plug & Drive Studio software available on their website (windows only):  
