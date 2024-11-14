@@ -74,7 +74,7 @@ Run the launch files (can0 needs to be UP and RUNNING and connected to at least 
  
 # Connect the motors to the computer through a CAN interface :  
 
-## See README_WIRING.md for more informations on the wiring of the motors
+## See README_WIRING.md for more informations on the wiring of the motors : https://github.com/MatHelio314/stepper_motor_ws/blob/main/README_WIRING.md
 
  ### I'm using a Peak USB to CAN adapter here but any other adapter with a recognizable driver on your computer would do (see daatsheet above)
 
