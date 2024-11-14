@@ -127,7 +127,7 @@ The PD4-C is equipped with a hex coding switch. This can be used to set the sour
 
 # Change the parameters of the motors 
 
-You can directly set parameters on the bus_template.yml file (See README_BUS_FILE.md for more details)
+You can directly set parameters on the bus_template.yml file (See README_BUS_FILE.md for more details) : https://github.com/MatHelio314/stepper_motor_ws/blob/main/README_BUS_FILE.md
 
 
 
