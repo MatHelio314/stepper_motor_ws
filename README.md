@@ -74,6 +74,8 @@ Run the launch files (can0 needs to be UP and RUNNING and connected to at least 
  
 # Connect the motors to the computer through a CAN interface :  
 
+## See README_WIRING.md for more informations on the wiring of the motors
+
  ### I'm using a Peak USB to CAN adapter here but any other adapter with a recognizable driver on your computer would do (see daatsheet above)
 
    Step 1 : Power up the stepper motors with the corresponding power supplies (24V & 5A) 
