@@ -172,6 +172,11 @@ Right now, the two X axis motor control is not perfect, we can measure at some p
 My current method to achieve synchronization is to send a position target value to both motors at the 'same time' using the async_send_request but it seems like it is causing a slight delay of 0.3ms between the two motors feedback, or maybe it is only the heartbeat of the two motors not beeing completely synchronized. 
 
 
+## Limit switch security
+
+If no negative limit switch is wired to the motor and the parameters are set to a homing mode different from 35 (default) then there is a security flaw if the homing mode is launched looking for a limit switch, i should implement a function that checks if a switch is connected before launching the homing mode
+
+
 
 
 
