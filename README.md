@@ -74,7 +74,7 @@ Run the launch files (can0 needs to be UP and RUNNING and connected to at least 
  
 # Connect the motors to the computer through a CAN interface :  
 
-## See README_WIRING.md for more informations on the wiring of the motors : https://github.com/MatHelio314/stepper_motor_ws/blob/main/README_WIRING.md
+See README_WIRING.md for more informations on the wiring of the motors : https://github.com/MatHelio314/stepper_motor_ws/blob/main/README_WIRING.md
 
  ### I'm using a Peak USB to CAN adapter here but any other adapter with a recognizable driver on your computer would do (see daatsheet above)
 
@@ -148,6 +148,8 @@ Also check if the firmware is up to date (the software can update it for you), i
 After launching the file, you will see a slider gui and buttons to control the motors.
 
 ![image](https://github.com/user-attachments/assets/72020cb3-621f-43a7-a27c-7df3aa246ce2)
+
+See README_NODES.md for more informations on the nodes : https://github.com/MatHelio314/stepper_motor_ws/blob/main/READMY_NODES.md
 
 
 The gui allows you to reset the motors, initialize them, launch position control nodes and closes them as well as stopping the motors in case of an emergency
