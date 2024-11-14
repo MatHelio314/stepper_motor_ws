@@ -59,6 +59,7 @@ Build the package :
 
 Run the launch files (can0 needs to be UP and RUNNING and connected to at least one motor (can_id 1,2,3 or/and 4)):  
 
+## Please make sure that you are using the negative limit switch if the parameter are enabling it before launching
 
  Normal mode :
 
@@ -160,6 +161,18 @@ The principle behing the position control relies on these three services that yo
     "Motor's joint name"/target ( {double} ) 
 
  
+
+-----------------------------------
+
+# Ideas & Improvements
+
+## Perfect synchronization
+
+Right now, the two X axis motor control is not perfect, we can measure at some points a 60 to 100 tenth of degrees offset between the two motors which accounts for about 140 µm offset in the mecanical setup. We still need to measure the actual offset tolerance of the setup when it will be finished but the idea is to minimize this offset as much as possible and achieve a perfect 0 offset if it is possible. 
+My current method to achieve synchronization is to send a position target value to both motors at the 'same time' using the async_send_request but it seems like it is causing a slight delay of 0.3ms between the two motors feedback, or maybe it is only the heartbeat of the two motors not beeing completely synchronized. 
+
+
+
 
 
 
