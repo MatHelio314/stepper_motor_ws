@@ -185,7 +185,17 @@ Add the possiblity to choose the units in a responsive and intuitive way for the
 Show position, velocity and torque feedback on screen compared to demanded values.
 Change input velocity, acceleration and other parameters directly via the gui.
 
+# Homing mode timout
 
+After 10 secs, the homing mode stops and claims that it failed, it is not very convenient when the motor is further than 42mm of the limit switch.
+
+# Limit switch during operation
+
+for now, the limit switch is only used for homing mode and if it is pushed while not being in that mode, it will issue no response on the motor. The behavior i want is that if the limit switch is pressed outside of homing mode, the motor should stop immediatly
+
+# Emergency stop during homing mode
+
+For now, the only way to stop the homing mode is to press the limit switch (or powering off the motor of course). I need to implement a button that stops the homing mode quickly
 
 
 
