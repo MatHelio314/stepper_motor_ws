@@ -89,7 +89,7 @@ DESTINATION lib/${PROJECT_NAME})
 
 
 install(DIRECTORY
-launch urdf meshes src
+launch urdf meshes src config 
 DESTINATION share/${PROJECT_NAME})
 
 if(BUILD_TESTING)

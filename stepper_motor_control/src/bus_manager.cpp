@@ -2,9 +2,12 @@
 #include <iostream>
 #include <string>
 #include <vector>
+#include <filesystem>
 #include <sstream>
 #include "rclcpp/rclcpp.hpp"
 #include "std_msgs/msg/string.hpp"
+namespace fs = std::filesystem;
+
 
 
 // The BusManager overwrites the bus.yml file with first the DefaultConfig and then listens to the check_motor_connection node for 
@@ -34,9 +37,30 @@ public:
     }
 
 private:
+    
     rclcpp::TimerBase::SharedPtr timer_;
-    std::string template_file_ = "src/ros2_canopen/stepper_motor_control/config/robot_control/bus_template.yml";
-    std::string output_file_ = "src/ros2_canopen/stepper_motor_control/config/robot_control/bus.yml";
+
+    std::string find_package_path(const std::string& src_dir, const std::string& package_name) {
+    for (const auto& entry : fs::recursive_directory_iterator(src_dir)) {
+        if (entry.is_directory() && entry.path().filename() == package_name) {
+            return entry.path().string();
+        }
+    }
+    throw std::runtime_error("Package " + package_name + " not found in " + src_dir);
+    }
+
+
+    std::string workspace_src = "src";
+    std::string package_name = "stepper_motor_control";
+
+    // Find the package dynamically
+    std::string package_path = find_package_path(workspace_src, package_name);
+
+    // Construct the paths to the template and output files
+    std::string template_file_ = package_path + "/config/robot_control/bus_template.yml";
+    std::string output_file_ = package_path + "/config/robot_control/bus.yml";
+
+
     rclcpp::Subscription<std_msgs::msg::String>::SharedPtr motor_state_subscriber_;
 
     // Writes the default header to bus.yml
@@ -55,6 +79,9 @@ private:
                      << "  sync_period: 10000\n\n";
         outputStream.close();
     }
+
+
+
 
     // Retrieves the content of a specified node section from the template file
     std::vector<std::string> getNodeConfig(const std::string &target_node) {
@@ -94,6 +121,8 @@ private:
         }
         outputStream.close();
     }
+
+    
 
     // Callback function to handle messages from /motor_states
     void motorStateCallback(const std_msgs::msg::String::SharedPtr msg) {
