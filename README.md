@@ -12,9 +12,8 @@
 
 - Ubuntu 22.04.5 LTS 
 
-- ROS2 Desktop Humble installed :
-
-      https://docs.ros.org/en/humble/Installation/Ubuntu-Install-Debs.html
+- [ROS2 Desktop Humble installed](https://docs.ros.org/en/humble/Installation/Ubuntu-Install-Debs.html)
+      
 
 - ROS2_CANOPEN library installed in your workspace :
    
