@@ -195,6 +195,7 @@ Change input velocity, acceleration and other parameters directly via the gui.
 # Find package improvement
 
 If the package is not installed in the exact same location, the code can not find it
+get_package_share_directory but in cpp
 
 
 
