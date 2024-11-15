@@ -15,10 +15,8 @@
 - [ROS2 Desktop Humble installed](https://docs.ros.org/en/humble/Installation/Ubuntu-Install-Debs.html)
       
 
-- ROS2_CANOPEN library installed in your workspace :
+- [ROS2_CANOPEN library installed in your workspace](https://ros-industrial.github.io/ros2_canopen/manual/rolling/quickstart/installation.html)
    
-      https://ros-industrial.github.io/ros2_canopen/manual/rolling/quickstart/installation.html
-
    Make sure that you use the right branch (humble) otherwise the building won't work :     
 
       https://github.com/ros-industrial/ros2_canopen/issues/217
@@ -29,15 +27,12 @@
 
       git checkout Humble
 
-- Stepper Motors PD4-C6018L4204-E-08 Nanotec Datasheet :  
+- [Stepper Motors PD4-C6018L4204-E-08 Nanotec Datasheet](https://www.nanotec.com/fileadmin/files/Handbuecher/Plug_Drive/PD4-C/fir-v2213/PD4C_CANopen_Technical-Manual_V3.3.0.pdf?1663072012)  
 
-      https://www.nanotec.com/fileadmin/files/Handbuecher/Plug_Drive/PD4-C/fir-v2213/PD4C_CANopen_Technical-Manual_V3.3.0.pdf?1663072012 
 
- 
+- [PCAN-USB FD Adapter](https://www.peak-system.com/PCAN-USB-FD.365.0.html?&L=1)  
 
-- PCAN-USB FD Adapter :  
-
-      https://www.peak-system.com/PCAN-USB-FD.365.0.html?&L=1 
+      
 
  - - - - - - - - - - - - - - - - - -
 
