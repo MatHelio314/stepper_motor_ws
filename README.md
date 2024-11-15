@@ -108,7 +108,7 @@ OR
     
 And look at the data passing through the can interface (install can_utils first) :  
 
-    sudo apt install can_utils
+    sudo apt install can-utils
 
     candump can0 
 
