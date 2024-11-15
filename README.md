@@ -185,6 +185,11 @@ If no negative limit switch is wired to the motor and the parameters are set to 
 
 For now we can only get position and velocity feedback because the tpdo and rpdo mappings are limiting the feedback to these two units. I need to research how theses mappings work in order to add the torque feedback functionnality.
 
+# GUI improvements
+
+Add the possiblity to choose the units in a responsive and intuitive way for the user.
+Show position, velocity and torque feedback on screen compared to demanded values.
+Change input velocity, acceleration and other parameters directly via the gui.
 
 
 
