@@ -192,6 +192,10 @@ Show position, velocity and torque feedback on screen compared to demanded value
 Change input velocity, acceleration and other parameters directly via the gui.
 
 
+# Find package improvement
+
+If the package is not installed in the exact same location, the code can not find it
+
 
 
 Concerning the meshes for the visualization launch, if you want to modify them,you have to download a .stl file and convert it into a .stl binary to make it work. 
