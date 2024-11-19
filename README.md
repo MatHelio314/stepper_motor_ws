@@ -47,7 +47,7 @@ Run the following commands in the /ros2_canopen folder of your new workspace to 
 
 Build the package :  
 
-    colcon build –-symlink-install 
+    colcon build --symlink-install 
     source install/setup.bash 
 
 
