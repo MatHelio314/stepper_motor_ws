@@ -185,7 +185,7 @@ Add the possiblity to choose the units in a responsive and intuitive way for the
 Show position, velocity and torque feedback on screen compared to demanded values.
 Change input velocity, acceleration and other parameters directly via the gui.
 
-# Homing mode timout
+# Homing mode timeout
 
 After 10 secs, the homing mode stops and claims that it failed, it is not very convenient when the motor is further than 42mm of the limit switch.
 
