@@ -175,11 +175,11 @@ My current method to achieve synchronization is to send a position target value 
 If no negative limit switch is wired to the motor and the parameters are set to a homing mode different from 35 (default) then there is a security flaw if the homing mode is launched looking for a limit switch, i should implement a function that checks if a switch is connected before launching the homing mode
 
 
-## Torque feedback
+## Torque feedback (SOLVED)
 
 For now we can only get position and velocity feedback because the tpdo and rpdo mappings are limiting the feedback to these two units. I need to research how theses mappings work in order to add the torque feedback functionnality.
 
-# GUI improvements
+# GUI improvements (SOLVED)
 
 Add the possiblity to choose the units in a responsive and intuitive way for the user.
 Show position, velocity and torque feedback on screen compared to demanded values.
