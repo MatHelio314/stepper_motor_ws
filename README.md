@@ -179,6 +179,9 @@ If no negative limit switch is wired to the motor and the parameters are set to 
 
 For now we can only get position and velocity feedback because the tpdo and rpdo mappings are limiting the feedback to these two units. I need to research how theses mappings work in order to add the torque feedback functionnality.
 
+I modified the ros2_canopen code based on [these changes](https://github.com/ros-industrial/ros2_canopen/pull/316/files), I merged my library with this one.
+Be careful, the merging will bring back the branch problem (not humble anymore), my solution was to only copy canopen_402_driver and canopen_ros2_control files from this new merge and keep the previous other files (mainly the core is causing issues with the ros2 version)
+
 # GUI improvements (SOLVED)
 
 Add the possiblity to choose the units in a responsive and intuitive way for the user.
