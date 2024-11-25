@@ -193,7 +193,7 @@ For now we can only get position and velocity feedback because the tpdo and rpdo
 I modified the ros2_canopen code based on [these changes](https://github.com/ros-industrial/ros2_canopen/pull/316/files), I merged my library with this one.
 Be careful, the merging will bring back the branch problem (not humble anymore), my solution was to only copy canopen_402_driver and canopen_ros2_control files from this new merge and keep the previous other files (mainly the core is causing issues with the ros2 version)
 
-# GUI improvements (SOLVED)
+## GUI improvements (SOLVED)
 
 Add the possiblity to choose the units in a responsive and intuitive way for the user.
 Show position, velocity and torque feedback on screen compared to demanded values.
@@ -204,7 +204,7 @@ New gui looks :
 The only problem is that the velocity change button does not work every time
 
 
-# Homing mode timeout (SOLVED)
+## Homing mode timeout (SOLVED)
 
 After 10 secs, the homing mode stops and claims that it failed, it is not very convenient when the motor is further than 42mm of the limit switch.
 
@@ -213,11 +213,11 @@ the problem came from the ros2_canopen library, in this particular file :
 
 Here I set the timemout to 90 seconds
 
-# Limit switch during operation
+## Limit switch during operation
 
 for now, the limit switch is only used for homing mode and if it is pushed while not being in that mode, it will issue no response on the motor. The behavior i want is that if the limit switch is pressed outside of homing mode, the motor should stop immediatly
 
-# Emergency stop during homing mode
+## Emergency stop during homing mode
 
 For now, the only way to stop the homing mode is to press the limit switch (or powering off the motor of course). I need to implement a button that stops the homing mode quickly
 
