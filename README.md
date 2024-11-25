@@ -164,6 +164,17 @@ The principle behing the position control relies on these three services that yo
 
 # Ideas & Improvements
 
+## Boot up issue (SOLVED)
+
+The ROS2 Canopen program occasionally failed to establish communication with the motors, leading to frequent launching errors. The solution was to set up a specific operating mode within the launch configuration file (bus_template.yml). It does not really matter which operation mode is selected, as long as it is not 'NONE', the device manager will be able to boot up the motor. (in SDO)
+
+    - {index: 0x6060, sub_index: 0, value: 1} # Set profile position mode
+
+## Inconsistent behavior (SOLVED)
+
+One of the motors exhibited inconsistent behavior compared to the others, which created complications in achieving uniform control. I found out that the NanoJ program inside it had been modified previously. This program is stored into an EEPROM and it is executed after the motor powers on. By copying the program from one of the correctly functioning motors and uploading it into the affected motor, the behavior normalized, effectively solving the issue. 
+I used [Plug & Drive Studio 3](https://www.nanotec.com/eu/en/products/10492-plug-drive-studio-3) with a [nanotec USB to CAN adapter](https://www.nanotec.com/eu/en/products/9987-zk-usb-can-1) to upload the new NanoJ program
+
 ## Perfect synchronization
 
 Right now, the two X axis motor control is not perfect, we can measure at some points a 60 to 100 tenth of degrees offset between the two motors which accounts for about 140 µm offset in the mecanical setup. We still need to measure the actual offset tolerance of the setup when it will be finished but the idea is to minimize this offset as much as possible and achieve a perfect 0 offset if it is possible. 
