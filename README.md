@@ -189,6 +189,11 @@ Change input velocity, acceleration and other parameters directly via the gui.
 
 After 10 secs, the homing mode stops and claims that it failed, it is not very convenient when the motor is further than 42mm of the limit switch.
 
+the problem came from the ros2_canopen library, in this particular file : 
+![image](https://github.com/user-attachments/assets/eb373e13-9f3a-4365-ae92-12b9c8056130)
+
+Here i set the tiemout to 90 seconds
+
 # Limit switch during operation
 
 for now, the limit switch is only used for homing mode and if it is pushed while not being in that mode, it will issue no response on the motor. The behavior i want is that if the limit switch is pressed outside of homing mode, the motor should stop immediatly
