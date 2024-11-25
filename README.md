@@ -192,7 +192,7 @@ After 10 secs, the homing mode stops and claims that it failed, it is not very c
 the problem came from the ros2_canopen library, in this particular file : 
 ![image](https://github.com/user-attachments/assets/eb373e13-9f3a-4365-ae92-12b9c8056130)
 
-Here i set the tiemout to 90 seconds
+Here I set the timemout to 90 seconds
 
 # Limit switch during operation
 
