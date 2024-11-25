@@ -170,7 +170,7 @@ Right now, the two X axis motor control is not perfect, we can measure at some p
 My current method to achieve synchronization is to send a position target value to both motors at the 'same time' using the async_send_request but it seems like it is causing a slight delay of 0.3ms between the two motors feedback, or maybe it is only the heartbeat of the two motors not beeing completely synchronized. 
 
 
-## Limit switch security
+## Limit switch security 
 
 If no negative limit switch is wired to the motor and the parameters are set to a homing mode different from 35 (default) then there is a security flaw if the homing mode is launched looking for a limit switch, i should implement a function that checks if a switch is connected before launching the homing mode
 
@@ -185,7 +185,7 @@ Add the possiblity to choose the units in a responsive and intuitive way for the
 Show position, velocity and torque feedback on screen compared to demanded values.
 Change input velocity, acceleration and other parameters directly via the gui.
 
-# Homing mode timeout
+# Homing mode timeout (SOLVED)
 
 After 10 secs, the homing mode stops and claims that it failed, it is not very convenient when the motor is further than 42mm of the limit switch.
 
