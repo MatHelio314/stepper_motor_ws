@@ -93,7 +93,7 @@ int main(int argc, char *argv[]) {
     };
 
     // Call init and mode services for both motors
-    call_service_sync(init_client_1, init_client_2, "Init");
+    // call_service_sync(init_client_1, init_client_2, "Init");
     call_service_sync(mode_client_1, mode_client_2, "Position Mode");
 
     // Prepare to send target positions to both motors

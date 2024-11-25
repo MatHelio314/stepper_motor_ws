@@ -27,7 +27,7 @@ void stop_callback(const std_msgs::msg::Int32::SharedPtr msg) {
 void joint_state_callback_1(const sensor_msgs::msg::JointState::SharedPtr msg) {
     if (!msg->position.empty()) {
         current_position_ = msg->position[0];  // Store current position of Motor 1
-        RCLCPP_INFO(rclcpp::get_logger("rclcpp"), "Motor current position: %.2f", current_position_);
+        RCLCPP_INFO(rclcpp::get_logger("rclcpp"), "Motor 3 current position: %.2f", current_position_);
     }
 }
 

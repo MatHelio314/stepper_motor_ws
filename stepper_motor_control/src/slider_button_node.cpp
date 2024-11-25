@@ -6,14 +6,23 @@
 #include <QSlider>
 #include <QVBoxLayout>
 #include <QComboBox>
+#include <QTimer>
 #include <QSpinBox>
 #include <QLabel>
 #include <QHBoxLayout>
 #include <QProcess>  // For launching and terminating external processes
+#include "sensor_msgs/msg/joint_state.hpp"  // To subscribe to joint_states
+
+double unit_coefficient = 0.1;
+double current_position_1, current_position_2, current_position_3, current_position_4;
+double current_torque_1, current_torque_2, current_torque_3, current_torque_4;
 
 class SliderNode : public rclcpp::Node {
+    
 public:
     SliderNode() : Node("slider_node") {
+
+
         // Publishers for X, Y, and Z positions
         publisher_x_ = this->create_publisher<std_msgs::msg::Int32>("slider_value_x", 10);
         publisher_y_ = this->create_publisher<std_msgs::msg::Int32>("slider_value_y", 10);
@@ -22,6 +31,25 @@ public:
         publisher_stop_x = this->create_publisher<std_msgs::msg::Int32>("stop_motor_X", 10);
         publisher_stop_y = this->create_publisher<std_msgs::msg::Int32>("stop_motor_Y", 10);
         publisher_stop_z = this->create_publisher<std_msgs::msg::Int32>("stop_motor_Z", 10);
+
+        // Subscriptions for joint states
+        joint_state_sub_1_ = this->create_subscription<sensor_msgs::msg::JointState>(
+            "/first_shaft_joint/joint_states", 10,
+            std::bind(&SliderNode::joint_state_callback_1, this, std::placeholders::_1));
+            
+        joint_state_sub_2_ = this->create_subscription<sensor_msgs::msg::JointState>(
+            "/second_shaft_joint/joint_states", 10,
+            std::bind(&SliderNode::joint_state_callback_2, this, std::placeholders::_1));
+
+        // Subscription to joint states
+        joint_state_sub_3_ = this->create_subscription<sensor_msgs::msg::JointState>(
+            "/third_shaft_joint/joint_states", 10,
+            std::bind(&SliderNode::joint_state_callback_3, this, std::placeholders::_1));
+
+        joint_state_sub_4_ = this->create_subscription<sensor_msgs::msg::JointState>(
+            "/fourth_shaft_joint/joint_states", 10,
+            std::bind(&SliderNode::joint_state_callback_4, this, std::placeholders::_1));
+
 
         // Initialize Qt
         app_ = std::make_shared<QApplication>(argc_, argv_);
@@ -40,6 +68,8 @@ public:
 
 
         QVBoxLayout *mainLayout = new QVBoxLayout;
+
+    
 
         // Create and style the title label
         QLabel *titleLabel = new QLabel("Position Control");
@@ -97,22 +127,23 @@ public:
         QSlider *sliderX, *sliderY, *sliderZ;
         QPushButton *enterButtonX, *enterButtonY, *enterButtonZ;
         QSpinBox *SpinBoxX,*SpinBoxY, *SpinBoxZ; 
-        createSliderLayout("X", sliderX, SpinBoxX,enterButtonX, 0, 408240);
-        createSliderLayout("Y", sliderY, SpinBoxY,enterButtonY, 0, 336240);
-        createSliderLayout("Z", sliderZ, SpinBoxZ,enterButtonZ, 0, 551232);
+        createSliderLayout("X", sliderX, SpinBoxX,enterButtonX, 0, unit_coefficient*257040);
+        createSliderLayout("Y", sliderY, SpinBoxY,enterButtonY, 0, unit_coefficient*144000);
+        createSliderLayout("Z", sliderZ, SpinBoxZ,enterButtonZ, 0, unit_coefficient*551232);
+
 
         // Connect "Enter" buttons to their respective publishers
         QObject::connect(enterButtonX, &QPushButton::clicked, [this, sliderX]() {
-            int value = sliderX->value();
+            int value = sliderX->value()/unit_coefficient;
             publishValue(publisher_x_, value, "X");
         });
         QObject::connect(enterButtonY, &QPushButton::clicked, [this, sliderY]() {
-            int value = sliderY->value();
+            int value = sliderY->value()/unit_coefficient;
             publishValue(publisher_y_, value, "Y");
             
         });
         QObject::connect(enterButtonZ, &QPushButton::clicked, [this, sliderZ]() {
-            int value = sliderZ->value();
+            int value = sliderZ->value()/unit_coefficient;
             publishValue(publisher_z_, value, "Z");
         });
 
@@ -204,33 +235,139 @@ public:
 
 
 
+        QVBoxLayout *optionsLayout = new QVBoxLayout;
 
-        // QVBoxLayout *rightLayout = new QVBoxLayout;
+        // Title for Options Layout
+        QLabel *optionsTitleLabel = new QLabel("Options");
+        optionsTitleLabel->setAlignment(Qt::AlignCenter);
+        QFont optionsTitleFont("Arial", 14, QFont::Bold);
+        optionsTitleLabel->setFont(optionsTitleFont);
+        optionsLayout->addWidget(optionsTitleLabel);
 
-        // // Create and style the title label
-        // QLabel *OptionTitleLabel = new QLabel("Options");
-        // OptionTitleLabel->setAlignment(Qt::AlignCenter);
-        // OptionTitleLabel->setFont(titleFont);
-        // rightLayout->addWidget(OptionTitleLabel);
+        // Add a dropdown (ComboBox) to select unit
+        QLabel *unitLabel = new QLabel("Select Unit:");
+        QComboBox *unitComboBox = new QComboBox;
+        unitComboBox->addItems({"Degrees", "Millimeters", "Revolutions"});
+        unitComboBox->setStyleSheet("font-size: 14px; color: #34495e;");
+
+        QVBoxLayout *unitLayout = new QVBoxLayout;
+        unitLayout->addWidget(unitLabel);
+        unitLayout->addWidget(unitComboBox);
+        optionsLayout->addLayout(unitLayout);
+
+        // Add a button to apply the selection
+        QPushButton *applyButton = new QPushButton("Apply");
+        applyButton->setStyleSheet("background-color: #3498db; color: white; font-weight: bold; font-size: 14px;"
+                                   "padding: 10px; border-radius: 5px;");
+        optionsLayout->addWidget(applyButton, 0, Qt::AlignCenter);
+
+        // Add feedback
+        QLabel *feedback_1 = new QLabel;
+        QLabel *feedback_2 = new QLabel;
+        QLabel *feedback_3 = new QLabel;
+        QLabel *feedback_4 = new QLabel;
+
+        feedback_1->setText(QString("Actual position motor X1: %1 degrees \n Torque X1 : %2 %")
+                        .arg(0.1 * current_position_1).arg(current_torque_1/10));
+        feedback_2->setText(QString("Actual position motor X2: %1 degrees \n Torque X2 : %2 %")
+                        .arg(0.1 * current_position_2).arg(current_torque_2/10));
+        feedback_3->setText(QString("Actual position motor Y: %1 degrees \n Torque Y : %2 %")
+                        .arg(0.1 * current_position_3).arg(current_torque_3/10));
+        feedback_4->setText(QString("Actual position motor Z: %1 degrees \n Torque Z : %2 %")
+                        .arg(0.1 * current_position_4).arg(current_torque_4/10));
+
+        feedback_1->setAlignment(Qt::AlignLeft);
+        feedback_2->setAlignment(Qt::AlignLeft);
+        feedback_3->setAlignment(Qt::AlignLeft);
+        feedback_4->setAlignment(Qt::AlignLeft);
+
+        // Add the QLabel to the layout
+        optionsLayout->addWidget(feedback_1);
+        optionsLayout->addWidget(feedback_2);
+        optionsLayout->addWidget(feedback_3);
+        optionsLayout->addWidget(feedback_4);
+
+        // spin boxes
+
+        QSpinBox *spinBoxVel = new QSpinBox;
+        spinBoxVel->setRange(0, 200);
+        spinBoxVel->setSingleStep(1);
+        spinBoxVel->setAlignment(Qt::AlignCenter);
+
+        QPushButton *enterVelButton = new QPushButton(QString("Enter Velocity"));
+        enterVelButton->setFixedWidth(200);
+
+        optionsLayout->addWidget(spinBoxVel);
+        optionsLayout->addWidget(enterVelButton);
+
+        // Add space between elements
+        optionsLayout->addStretch();
 
 
-        // unitComboBox = new QComboBox;
-        // unitComboBox->addItem(tm("Degrees"), 1);
-        // unitComboBox->addItem(tm("Revolutions"), 1/360);
-        // unitComboBox->addItem(tm("mm"), 5/360);
+        // Connect the "Apply" button to a callback
+        QObject::connect(applyButton, &QPushButton::clicked, [unitComboBox, this, sliderX, SpinBoxX, sliderY, SpinBoxY, sliderZ, SpinBoxZ]() {
+            QString selectedUnit = unitComboBox->currentText();
+            RCLCPP_INFO(this->get_logger(), "Selected Unit: %s", selectedUnit.toStdString().c_str());
 
-        // QHBoxLayout *optionLayout = new QHBoxLayout;
-        // optionLayout->addWidget(unitComboBox);
+            // Update the unit coefficient
+            if (selectedUnit == "Degrees") {
+                unit_coefficient = 0.1;
+            } else if (selectedUnit == "Millimeters") {
+                unit_coefficient = 0.001388888888888888888888889;
+            } else if (selectedUnit == "Revolutions") {
+                unit_coefficient = 0.000277777777777777777777778;
+            }
 
-        // rightLayout->addLayout(optionLayout);
+            // Update slider ranges dynamically
+            updateSliderRanges(sliderX, SpinBoxX, sliderY, SpinBoxY, sliderZ, SpinBoxZ);
+        });
+
+        QTimer *timer = new QTimer;
+        QObject::connect(timer, &QTimer::timeout, [feedback_1,feedback_2,feedback_3,feedback_4, this, unitComboBox]() {
+            rclcpp::spin_some(this->get_node_base_interface());
+            QString selectedUnit = unitComboBox->currentText();
+            feedback_1->setText(QString("Actual position motor X1: %1 %2, \n Torque X1 : %3 %")
+                        .arg(unit_coefficient * current_position_1)
+                        .arg(selectedUnit)
+                        .arg(current_torque_1/10));
+            feedback_2->setText(QString("Actual position motor X2: %1 %2, \n Torque X1 : %3 %")
+                        .arg(unit_coefficient * current_position_2)
+                        .arg(selectedUnit)
+                        .arg(current_torque_2/10));
+            feedback_3->setText(QString("Actual position motor Y: %1 %2, \n Torque Y : %3 %")
+                        .arg(unit_coefficient * current_position_3)
+                        .arg(selectedUnit)
+                        .arg(current_torque_3/10));
+            feedback_4->setText(QString("Actual position motor Z: %1 %2, \n Torque Z : %3 %")
+                        .arg(unit_coefficient * current_position_4)
+                        .arg(selectedUnit)
+                        .arg(current_torque_4/10));
+
+        });
+        timer->start(10); // Trigger every 1000ms (1 second)
+
+        QObject::connect(enterVelButton, &QPushButton::clicked, [spinBoxVel, this]() {
+            int vel_value = spinBoxVel->value();
+
+            QProcess *process = new QProcess(nullptr);
+            // Construct the command with the parameter
+            QStringList arguments;
+            arguments << "run" << "stepper_motor_control" << "changeVel"
+                    << "--ros-args" << "-p" << QString("%1:=%2").arg("VelValue").arg(vel_value);
+            
+            process->start("ros2", arguments);
+            RCLCPP_INFO(this->get_logger(), "Launched ChangeVel Node");
+        });
 
 
         // Add both layouts to the main horizontal layout
+
         mainHLayout->addLayout(mainLayout);
-        // mainHLayout->addLayout(rightLayout);
+        mainHLayout->addLayout(optionsLayout);
+
         // Set the layout and show the window
         window->setLayout(mainHLayout);
-        // window->setFixedSize(1000, 650);  // Adjusted size for more widgets
+        // window->setFixedSize(1400, 650);  // Adjusted size for more widgets
         window->show();
 
         // Timer to periodically check if ROS2 is still running
@@ -245,9 +382,12 @@ public:
     // Run the Qt application
     void run() {
         app_->exec();
+        
     }
 
 private:
+
+
     // Separate publish function for each axis
     void publishValue(rclcpp::Publisher<std_msgs::msg::Int32>::SharedPtr publisher, int value, const std::string &axis) {
         auto message = std_msgs::msg::Int32();
@@ -255,6 +395,54 @@ private:
         RCLCPP_INFO(this->get_logger(), "Publishing %s: %d", axis.c_str(), value);
         publisher->publish(message);
     }
+
+    void updateSliderRanges(QSlider *sliderX, QSpinBox *spinBoxX, QSlider *sliderY, QSpinBox *spinBoxY, QSlider *sliderZ, QSpinBox *spinBoxZ) {
+            sliderX->setRange(0, unit_coefficient * 257040);
+            spinBoxX->setRange(0, unit_coefficient * 257040);
+
+            sliderY->setRange(0, unit_coefficient * 144000);
+            spinBoxY->setRange(0, unit_coefficient * 144000);
+
+            sliderZ->setRange(0, unit_coefficient * 551232);
+            spinBoxZ->setRange(0, unit_coefficient * 551232);
+    }
+
+
+    // Callback function for joint state subscription of Motor 1
+    void joint_state_callback_1(const sensor_msgs::msg::JointState::SharedPtr msg) {
+        if (!msg->position.empty()) {
+            current_position_1 = msg->position[0];  // Store current position of Motor 1
+            current_torque_1 = msg->effort[0];
+        }
+    }
+
+    // Callback function for joint state subscription of Motor 2
+    void joint_state_callback_2(const sensor_msgs::msg::JointState::SharedPtr msg) {
+        if (!msg->position.empty()) {
+            current_position_2 = msg->position[0];  // Store current position of Motor 2
+            current_torque_2 = msg->effort[0];
+        }
+    }
+
+    void joint_state_callback_3(const sensor_msgs::msg::JointState::SharedPtr msg) {
+        if (!msg->position.empty()) {
+            current_position_3 = msg->position[0];  // Store current position of Motor 3
+            current_torque_3 = msg->effort[0];
+        }
+    }
+
+    // Callback function for joint state subscription of Motor
+    void joint_state_callback_4(const sensor_msgs::msg::JointState::SharedPtr msg) {
+        if (!msg->position.empty()) {
+            current_position_4 = msg->position[0];  // Store current position of Motor 4
+            current_torque_4 = msg->effort[0];
+        }
+    }
+
+
+
+
+
 
     void launchPositionTickNode(const QString &nodeName) {
         // Check if the process for the corresponding node is already running
@@ -312,6 +500,8 @@ private:
     }
 
 
+
+
     void terminatePositionTickNode(QProcess *&process) {
         if (process && process->state() != QProcess::NotRunning) {
             process->terminate();
@@ -350,7 +540,16 @@ private:
     rclcpp::Publisher<std_msgs::msg::Int32>::SharedPtr publisher_torque_x_;
     rclcpp::Publisher<std_msgs::msg::Int32>::SharedPtr publisher_torque_y_;
     rclcpp::Publisher<std_msgs::msg::Int32>::SharedPtr publisher_torque_z_;
+
+    rclcpp::Subscription<sensor_msgs::msg::JointState>::SharedPtr joint_state_sub_1_;
+    rclcpp::Subscription<sensor_msgs::msg::JointState>::SharedPtr joint_state_sub_2_;
+    rclcpp::Subscription<sensor_msgs::msg::JointState>::SharedPtr joint_state_sub_3_;
+    rclcpp::Subscription<sensor_msgs::msg::JointState>::SharedPtr joint_state_sub_4_;
+
+
+
     std::shared_ptr<QApplication> app_;
+    
     rclcpp::TimerBase::SharedPtr check_ros_shutdown_timer_;
     int argc_ = 0;
     char **argv_ = nullptr;
@@ -367,14 +566,19 @@ private:
 int main(int argc, char **argv) {
     rclcpp::init(argc, argv);
 
+    
+
     // Create and run the node
     auto node = std::make_shared<SliderNode>();
+
     node->run();
 
     rclcpp::spin(node);
     rclcpp::shutdown();
     return 0;
 }
+
+#include "slider_button_node.moc"
 
 
 

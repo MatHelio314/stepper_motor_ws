@@ -38,6 +38,10 @@ add_executable(Reset_Home_X src/Reset_Home_X.cpp)
 ament_target_dependencies(Reset_Home_X
 rclcpp std_srvs canopen_interfaces)
 
+add_executable(changeVel src/changeVel.cpp)
+ament_target_dependencies(changeVel
+rclcpp std_srvs canopen_interfaces)
+
 add_executable(Reset_Home_Z src/Reset_Home_Z.cpp)
 ament_target_dependencies(Reset_Home_Z
 rclcpp std_srvs canopen_interfaces)
@@ -54,12 +58,6 @@ add_executable(position_tick_client_Z src/position_tick_motor_Z.cpp)
 ament_target_dependencies(position_tick_client_Z
 rclcpp std_srvs canopen_interfaces std_msgs sensor_msgs canopen_interfaces)
 
-add_executable(motor_joint_states_gui src/motor_joint_states_gui.cpp)
-target_link_libraries(motor_joint_states_gui Qt5::Core Qt5::Widgets)
-ament_target_dependencies(motor_joint_states_gui
-rclcpp sensor_msgs )
-target_include_directories(motor_joint_states_gui PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
-
 add_executable(torque_tick_client_X src/torque_tick_motor_X.cpp)
 ament_target_dependencies(torque_tick_client_X
 rclcpp std_srvs canopen_interfaces std_msgs sensor_msgs canopen_interfaces)
@@ -69,8 +67,9 @@ ament_target_dependencies(check_motor_connection
 rclcpp std_msgs)
 
 add_executable(slider_button_node src/slider_button_node.cpp)
-target_link_libraries(slider_button_node Qt5::Widgets)
-ament_target_dependencies(slider_button_node rclcpp std_msgs )
+target_link_libraries(slider_button_node Qt5::Widgets Qt5::Core)
+ament_target_dependencies(slider_button_node rclcpp std_msgs sensor_msgs)
+
 
 
 install(TARGETS
@@ -84,7 +83,7 @@ slider_button_node
 Reset_Home_Y
 Reset_Home_X
 Reset_Home_Z
-motor_joint_states_gui
+changeVel
 DESTINATION lib/${PROJECT_NAME})
 
 
