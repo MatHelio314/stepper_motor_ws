@@ -244,7 +244,7 @@ third_shaft_joint:
     - {index: 0x60C4, sub_index: 6, value: 1} # Interpolated position mode needed param 
     - {index: 0x60C6, sub_index: 0, value: 1000} # Max Acceleration
     - {index: 0x607D, sub_index: 1, value: 0} # Min Position
-    - {index: 0x607D, sub_index: 2, value: 144000} # Max Position
+    - {index: 0x607D, sub_index: 2, value: 135360} # Max Position
     - {index: 0x6098, sub_index: 0, value: 17} # Homing method
     - {index: 0x3240, sub_index: 1, value: 1} # Special function enable
     # - {index: 0x3701, sub_index: 0, value: -1} # Limit Switch Error Option Code

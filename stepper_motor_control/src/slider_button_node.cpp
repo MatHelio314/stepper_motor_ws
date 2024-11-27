@@ -128,7 +128,7 @@ public:
         QPushButton *enterButtonX, *enterButtonY, *enterButtonZ;
         QSpinBox *SpinBoxX,*SpinBoxY, *SpinBoxZ; 
         createSliderLayout("X", sliderX, SpinBoxX,enterButtonX, 0, unit_coefficient*257040);
-        createSliderLayout("Y", sliderY, SpinBoxY,enterButtonY, 0, unit_coefficient*144000);
+        createSliderLayout("Y", sliderY, SpinBoxY,enterButtonY, 0, unit_coefficient*135360);
         createSliderLayout("Z", sliderZ, SpinBoxZ,enterButtonZ, 0, unit_coefficient*551232);
 
 
@@ -400,8 +400,8 @@ private:
             sliderX->setRange(0, unit_coefficient * 257040);
             spinBoxX->setRange(0, unit_coefficient * 257040);
 
-            sliderY->setRange(0, unit_coefficient * 144000);
-            spinBoxY->setRange(0, unit_coefficient * 144000);
+            sliderY->setRange(0, unit_coefficient * 135360);
+            spinBoxY->setRange(0, unit_coefficient * 135360);
 
             sliderZ->setRange(0, unit_coefficient * 551232);
             spinBoxZ->setRange(0, unit_coefficient * 551232);
