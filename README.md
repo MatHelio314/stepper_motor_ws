@@ -210,10 +210,11 @@ Be careful, the merging will bring back the branch problem (not humble anymore),
 
 Add the possiblity to choose the units in a responsive and intuitive way for the user.
 Show position, velocity and torque feedback on screen compared to demanded values.
-Change input velocity, acceleration and other parameters directly via the gui.
+Change input velocity (in Rev/Min) via the gui.
 
 New gui looks : 
 ![image](https://github.com/user-attachments/assets/45092ea6-c5f2-4b01-a094-e618cb67eaac)
+
 The only problem is that the velocity change button does not work every time
 
 
