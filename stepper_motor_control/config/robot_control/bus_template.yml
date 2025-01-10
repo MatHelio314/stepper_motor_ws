@@ -332,18 +332,20 @@ fourth_shaft_joint:
   heartbeat_producer: 2000
   
   sdo: # SDO executed during config
-    - {index: 0x6081, sub_index: 0, value: 200} # Set velocity 
+    - {index: 0x3240, sub_index: 2, value: 1} # Function inverted
+    - {index: 0x6081, sub_index: 0, value: 100} # Set velocity 
     - {index: 0x6083, sub_index: 0, value: 1000} # Set acceleration
     - {index: 0x6084, sub_index: 0, value: 1000} # Set deceleration
     - {index: 0x6085, sub_index: 0, value: 10000} # Set quickstop deceleration
-    - {index: 0x6060, sub_index: 0, value: 6} # Set profile position mode
-    - {index: 0x6098, sub_index: 0, value: 35} # Set default homing mode to 35
+    - {index: 0x6060, sub_index: 0, value: 1} # Set profile position mode
+    - {index: 0x6098, sub_index: 0, value: 17} # Set default homing mode to 35
     - {index: 0x60C2, sub_index: 1, value: 50} # Set interpolation time for cyclic modes to 50 ms
     - {index: 0x60C2, sub_index: 2, value: -3} # Set base 10-3s
     - {index: 0x60C4, sub_index: 6, value: 1} # Interpolated position mode needed param 
     - {index: 0x60C6, sub_index: 0, value: 1000} # Max Acceleration
     - {index: 0x607D, sub_index: 1, value: 0} # Min Position
-    - {index: 0x607D, sub_index: 2, value: 551232} # Max Position
+    - {index: 0x607D, sub_index: 2, value: 257040} # Max Position  
+    - {index: 0x3240, sub_index: 1, value: 1} # Special function enable
 
   tpdo: 
     1:
