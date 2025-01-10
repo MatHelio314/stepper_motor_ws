@@ -72,7 +72,10 @@ Run the launch files (can0 needs to be UP and RUNNING and connected to at least 
  Visualization (rviz2) : 
 
     ros2 launch stepper_motor_control main.launch.py sim:=true
- 
+
+ If you run visualization, make sure that the connected motors are uncommented in this file : 
+ ![image](https://github.com/user-attachments/assets/8e554283-75fe-4189-a68b-ea307e0015b2)
+
 - - - - - - - - - - - - - - - - - -
 
  
@@ -135,7 +138,7 @@ You can directly set parameters on the bus_template.yml file (See README_BUS_FIL
 
 
 
-What i recommend doing if clarifications are needed is to get the nanotec USB to CAN adapter ZK-USB-CAN-1 and use it with the Plug & Drive Studio software available on their website (windows only):  
+What i recommend doing if clarifications are needed is to get the nanotec USB to CAN adapter ZK-USB-CAN-1 and use it with the Plug & Drive Studio 3 software available on their website (windows only):  
 
     https://www.nanotec.com/eu/en/products/2256-software-for-brushless-dc-servo-motor-controller 
 
@@ -153,7 +156,7 @@ After launching the file, you will see a slider gui and buttons to control the m
 
 ![image](https://github.com/user-attachments/assets/72020cb3-621f-43a7-a27c-7df3aa246ce2)
 
-See README_NODES.md for more informations on the nodes : https://github.com/MatHelio314/stepper_motor_ws/blob/main/READMY_NODES.md
+See PACKAGES_OVERVIEW.md for more informations on the nodes.
 
 
 The gui allows you to reset the motors, initialize them, launch position control nodes and closes them as well as stopping the motors in case of an emergency
