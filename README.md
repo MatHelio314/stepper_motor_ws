@@ -50,10 +50,20 @@ Build the package :
     colcon build --symlink-install 
     source install/setup.bash 
 
+You are free to perform two modifications on the ros2_canopen code. 
+The first one is to get torque feedback from the motors with [these changes](https://github.com/ros-industrial/ros2_canopen/pull/316/files), I merged my library with this one. 
+Be careful, the merging will bring back the branch problem (not humble anymore), my solution was to only copy canopen_402_driver and canopen_ros2_control files from this new merge and keep the previous other files (mainly the core is causing issues with the ros2 version)
+
+The second change is about homing timeout : 
+![image](https://github.com/user-attachments/assets/eb373e13-9f3a-4365-ae92-12b9c8056130)
+Here I set the timemout to 90 seconds
+
+To know more about why i did these changes, you can read the "Ideas & Improvements" section below
+
 
 Run the launch files (can0 needs to be UP and RUNNING and connected to at least one motor (can_id 1,2,3 or/and 4)):  
 
-## Please make sure that you are using the negative limit switch if the parameter are enabling it before launching
+#### Please make sure that you are using the negative limit switch if the parameter are enabling it before launching
 
  Normal mode :
 
